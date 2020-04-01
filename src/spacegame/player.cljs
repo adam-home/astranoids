@@ -79,8 +79,8 @@
     (assoc player :x xx :y yy)))
 
 (defn draw-player
-  [ctx player]
-  (draw/draw-shape ctx (:shape player)
+  [player]
+  (draw/draw-shape globals/buffer-ctx (:shape player)
                    :colour "yellow"
                    :x (:x player)
                    :y (:y player)
@@ -89,7 +89,7 @@
 
 ;; Create a load of particles at the player's location, expanding away
 (defn explode
-  [ctx player]
+  [player]
   (dotimes [_ 40]
     (let [[dx dy] (geom/vector-to-dx-dy (rand globals/circle) (rand 4))]
       (set! globals/particles (conj globals/particles

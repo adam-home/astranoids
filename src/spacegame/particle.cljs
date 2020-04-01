@@ -1,4 +1,5 @@
-(ns spacegame.particle)
+(ns spacegame.particle
+  (:require [spacegame.globals :as globals]))
 
 (def DEFAULT-PARTICLE-COLOURS ["red" "orange" "yellow"])
 
@@ -16,24 +17,22 @@
      }))
 
 (defn draw-particle
-  [ctx particle]
-  (.beginPath ctx)
-  (set! (.-globalAlpha ctx) (/ (- (:lifetime particle) (:age particle)) (:lifetime particle)))
-;;  (.rect ctx (:x particle) (:y particle) 4 4)
-  (.arc ctx
-        (:x particle) (:y particle)
-        2
-        0
-        (* 2 Math.PI))
-  (set! (.-fillStyle ctx) (:colour particle))
-  (.fill ctx))
+  [particle]
+
+  (.beginPath globals/buffer-ctx)
+  (set! (.-globalAlpha globals/buffer-ctx) (/ (- (:lifetime particle) (:age particle)) (:lifetime particle)))
+  (.rect globals/buffer-ctx
+         (:x particle) (:y particle)
+         2 2)
+  (set! (.-fillStyle globals/buffer-ctx) (:colour particle))
+  (.fill globals/buffer-ctx))
 
 (defn draw-particles
-  [ctx particles]
-  (.save ctx)
+  [particles]
+  (.save globals/buffer-ctx)
   (doseq [p particles]
-    (draw-particle ctx p))
-  (.restore ctx))
+    (draw-particle p))
+  (.restore globals/buffer-ctx))
 
 (defn move-particle
   [particle]

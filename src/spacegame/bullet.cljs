@@ -19,31 +19,31 @@
      :y y
      :dx dx
      :dy dy
-     :lifetime 400
+     :lifetime 300
      :age 0
      }))
 
 (defn draw-bullet
-  [ctx bullet]
-  (.beginPath ctx)
+  [bullet]
+  (.beginPath globals/buffer-ctx)
   ;;(.rect ctx (:x bullet) (:y bullet) 4 4)
-  (.arc ctx
+  (.arc globals/buffer-ctx
         (:x bullet) (:y bullet)
         2
         0
         (* 2 Math.PI))
-        
-  (set! (.-fillStyle ctx) "white")
-  (set! (.-shadowBlur ctx) 8)
-  (set! (.-shadowColor ctx) "green")
-  (.fill ctx))
+
+  (set! (.-fillStyle globals/buffer-ctx) "white")
+  (set! (.-shadowBlur globals/buffer-ctx) 8)
+  (set! (.-shadowColor globals/buffer-ctx) "green")
+  (.fill globals/buffer-ctx))
 
 (defn draw-bullets
-  [ctx bullets]
-  (.save ctx)
+  [bullets]
+  (.save globals/buffer-ctx)
   (doseq [b bullets]
-    (draw-bullet ctx b))
-  (.restore ctx))
+    (draw-bullet b))
+  (.restore globals/buffer-ctx))
 
 (defn move-bullet
   [bullet]
@@ -64,6 +64,6 @@
   (let [active (filter #(< (:age %) (:lifetime %)) bullets)]
     (into #{} (map move-bullet active))))
 
-(defn remove
+(defn remove-bullet
   [bullet]
   (set! globals/bullets (disj globals/bullets bullet)))

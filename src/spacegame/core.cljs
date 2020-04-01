@@ -46,7 +46,7 @@
 
 
 (defn main-loop
-  [game-ctx buffer-ctx]
+  []
 
   (when (contains? keys-down KEY_LEFT)
     (set! player (player/rotate-left player)))
@@ -57,21 +57,22 @@
   (when (contains? keys-down KEY_UP)
     (set! player (player/thrust player)))
 
-  (when (contains? keys-down KEY_L_CTRL)
-    (set! globals/bullets (conj globals/bullets (bullet/make-bullet player))))
+  (and (contains? keys-down KEY_L_CTRL)
+       (> 5 (count globals/bullets))
+       (set! globals/bullets (conj globals/bullets (bullet/make-bullet player))))
 
-  (draw/clear-canvas buffer-ctx :colour "black")
+  (draw/clear-canvas globals/buffer-ctx :colour "black")
 
-  (player/draw-player buffer-ctx player)
+  (player/draw-player player)
   (set! player (player/move-player player))
   
-  (part/draw-particles buffer-ctx globals/particles)
+  (part/draw-particles globals/particles)
   (set! globals/particles (part/move-particles globals/particles))
 
-  (bullet/draw-bullets buffer-ctx globals/bullets)
+  (bullet/draw-bullets globals/bullets)
   (set! globals/bullets (bullet/move-bullets globals/bullets))
 
-  (asteroid/draw-asteroids buffer-ctx globals/asteroids)
+  (asteroid/draw-asteroids globals/asteroids)
   (set! globals/asteroids (asteroid/move-asteroids globals/asteroids))
 
   (let [player-translated (geom/translate-shape (:shape player) (:x player) (:y player))]
@@ -81,20 +82,28 @@
       
         ;; Check to see if any of the asteroids have hit the player
         (when (collision/polygons-intersect? asteroid-translated player-translated)
-          (player/explode buffer-ctx player)
+          (player/explode player)
           (set! player (player/make-player (/ (first cfg/default-canvas-size) 2)
                                            (/ (second cfg/default-canvas-size) 2))))
 
         ;; Check to see if any of the asteroids have been hit by a bullet
         (doseq [bullet globals/bullets]
           (when (collision/bullet-intersect? asteroid-translated box-translated bullet)
-            (asteroid/explode buffer-ctx asteroid)
+            (asteroid/explode asteroid)
             (asteroid/remove-asteroid asteroid)
-            (bullet/remove bullet)
-            )))))
+            (bullet/remove-bullet bullet)
 
-  (.drawImage game-ctx
-              (.-canvas buffer-ctx)
+            (if (> 3 (:generation asteroid))
+              (dotimes [_ 2]
+                (set! globals/asteroids
+                      (conj globals/asteroids
+                            (asteroid/make-asteroid (:x asteroid) (:y asteroid)
+                                                    (inc (:generation asteroid)))))
+            )))))))
+
+
+  (.drawImage globals/screen-ctx
+              (.-canvas globals/buffer-ctx)
               0 0)
 
   (when (empty? globals/asteroids)
@@ -103,7 +112,7 @@
   
   (.requestAnimationFrame js/window
                           (fn []
-                            (main-loop game-ctx buffer-ctx)
+                            (main-loop)
 
                             ;; Fire button doesn't repeat
                             (set! keys-down (disj keys-down KEY_L_CTRL))
@@ -114,8 +123,12 @@
 (let [[game-canvas buffer] (draw/create-canvas "canvas-container"
                                                (first cfg/default-canvas-size)
                                                (second cfg/default-canvas-size)
-                                               :id "game-canvas")
-      game-ctx (.getContext game-canvas "2d")
-      buffer-ctx (.getContext buffer "2d")]
+                                               :id "game-canvas")]
+      ;; game-ctx (.getContext game-canvas "2d")
+      ;; buffer-ctx (.getContext buffer "2d")]
 
-  (.requestAnimationFrame js/window (fn [] (main-loop game-ctx buffer-ctx))))
+  (set! globals/screen-ctx (.getContext game-canvas "2d"))
+  (set! globals/buffer-ctx (.getContext buffer "2d"))
+  
+  (.requestAnimationFrame js/window main-loop))
+;;(fn [] (main-loop game-ctx buffer-ctx))))
