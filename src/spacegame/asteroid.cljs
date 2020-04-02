@@ -81,14 +81,12 @@
         (set! globals/asteroids (conj globals/asteroids a))
         )))
 
-
-
 (defn draw-asteroid
   [asteroid]
-  (draw/draw-shape globals/buffer-ctx (:shape asteroid)
+  (draw/draw-shape (:shape asteroid)
                    :x (:x asteroid) :y (:y asteroid)
                    :angle 0 :scale 1 :width 2
-                   :color "white"
+                   :colour "green"
                    :fill "black"))
 
 (defn draw-asteroids

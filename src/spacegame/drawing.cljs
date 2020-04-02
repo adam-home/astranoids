@@ -1,7 +1,5 @@
-(ns spacegame.drawing)
-
-(def current-bg "blue")
-(def current-fg "green")
+(ns spacegame.drawing
+  (:require [spacegame.globals :as globals :refer [buffer-ctx screen-ctx]]))
 
 (defn get-elem-by-id
   [elem-id]
@@ -26,48 +24,47 @@
     [canvas-elem buffer]))
 
 (defn clear-canvas
-  [ctx & {:keys [colour]}]
-  "Clears the canvas to :colour, or the current background colour if
-  not specified."
-    (.beginPath ctx)
-    (.rect ctx 0 0 (.-width (.-canvas ctx)) (.-height (.-canvas ctx)))
-    (set! (.-fillStyle ctx) (or colour current-bg))
-    (.fill ctx))
+  []
+  (.beginPath buffer-ctx)
+  (.rect buffer-ctx 0 0 (.-width (.-canvas buffer-ctx)) (.-height (.-canvas buffer-ctx)))
+  (set! (.-fillStyle buffer-ctx) "black")
+  (.fill buffer-ctx))
+
+(defn flip
+  []
+  (.drawImage screen-ctx
+              (.-canvas buffer-ctx)
+              0 0))
 
 (defn draw-shape
-  [ctx shape & {:keys [colour fill x y angle scale width]}] 
-  (.save ctx)
+  [shape & {:keys [colour fill x y angle scale width]}] 
+  (.save buffer-ctx)
 
   (when (and x y)
-    (.translate ctx x y))
+    (.translate buffer-ctx x y))
   (when angle
-    (.rotate ctx angle))
+    (.rotate buffer-ctx angle))
   (when scale
-    (.scale ctx scale scale))
+    (.scale buffer-ctx scale scale))
   
-  (.beginPath ctx)
-
-  ;; (let [[px py] (first path)]
-  ;;   (.moveTo ctx px py))
-  
-  ;; (doseq [[px py] (rest path)]
-  ;;   (.lineTo ctx px py))
+  (.beginPath buffer-ctx)
 
   (doseq [path shape]
-    (.moveTo ctx (first (first path)) (second (first path)))
-    (.lineTo ctx (first (second path)) (second (second path))))
+    (.moveTo buffer-ctx (first (first path)) (second (first path)))
+    (.lineTo buffer-ctx (first (second path)) (second (second path))))
   
-  (.closePath ctx)
+  (.closePath buffer-ctx)
 
-  (set! (.-lineWidth ctx) (or width 2))
-  (set! (.-strokeStyle ctx) (or colour current-fg))
+  (set! (.-lineWidth buffer-ctx) (or width 2))
+  (set! (.-strokeStyle buffer-ctx) (or colour "white"))
+  
   (when fill
-    (set! (.-fillStyle ctx) fill)
-    (.fill ctx))
+    (set! (.-fillStyle buffer-ctx) fill)
+    (.fill buffer-ctx))
   
-  (.stroke ctx)
+  (.stroke buffer-ctx)
   
-  (.restore ctx))
+  (.restore buffer-ctx))
 
 (defn rotate-around-point
   [x y origin-x origin-y angle]

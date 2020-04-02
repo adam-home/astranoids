@@ -80,7 +80,7 @@
 
 (defn draw-player
   [player]
-  (draw/draw-shape globals/buffer-ctx (:shape player)
+  (draw/draw-shape (:shape player)
                    :colour "yellow"
                    :x (:x player)
                    :y (:y player)
