@@ -94,6 +94,7 @@
         ;; Check to see if any of the asteroids have been hit by a bullet
         (doseq [bullet globals/bullets]
           (when (bullet-intersect? asteroid-translated box-translated bullet)
+            (set! player (player/add-score player 1))
             (asteroid/explode asteroid)
             (asteroid/remove-asteroid asteroid)
             (bullet/remove-bullet bullet)

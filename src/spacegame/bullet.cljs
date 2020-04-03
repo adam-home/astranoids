@@ -1,7 +1,8 @@
 (ns spacegame.bullet
   (:require [spacegame.config :as cfg]
             [spacegame.globals :as globals]
-            [spacegame.drawing :as draw]))
+            [spacegame.drawing :as draw]
+            [spacegame.geometry :as geom]))
 
 (defn make-bullet [player]
   (let [
@@ -10,7 +11,7 @@
         ca (Math/cos (:angle player))
         dx (+ (:dx player) (* 2 sa))
         dy (+ (:dy player) (* 2 ca))
-        [x y] (draw/rotate-around-point (:x player) (- (:y player) 10)
+        [x y] (geom/rotate-around-point (:x player) (- (:y player) 10)
                                         (:x player) (:y player)
                                         (:angle player))]
 

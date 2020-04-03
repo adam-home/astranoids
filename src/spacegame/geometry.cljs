@@ -20,6 +20,16 @@
   (for [pair box]
     (translate-pair pair dx dy)))
 
+(defn rotate-around-point
+  [x y origin-x origin-y angle]
+  (let [sa (Math/sin angle)
+        ca (Math/cos angle)
+        dx (- x origin-x)
+        dy (- y origin-y)]
+
+    [(+ (- (* ca dx) (* sa dy)) origin-x)
+     (+ (+ (* sa dx) (* ca dy)) origin-y)]))
+
 (defn vector-to-dx-dy
   [angle velocity]
   (let [dx (* velocity (Math/sin angle))

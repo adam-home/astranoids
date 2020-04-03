@@ -14,7 +14,7 @@
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
-)
+  )
 
 (enable-console-print!)
 
@@ -25,7 +25,7 @@
 (defonce app-state (atom {:text "Hello world!"}))
 
 (set! player (player/make-player (/ (first cfg/default-canvas-size) 2)
-                                         (/ (second cfg/default-canvas-size) 2)))
+                                 (/ (second cfg/default-canvas-size) 2)))
 
 (.addEventListener js/window ;; (get-elem-by-id "game-canvas")
                    "keydown"
@@ -48,6 +48,9 @@
 
   (draw/clear-canvas)
 
+  (draw/draw-lives player)
+  (draw/draw-score (:score player))
+  
   (player/draw-player player)
   (part/draw-particles particles)
   (bullet/draw-bullets bullets)

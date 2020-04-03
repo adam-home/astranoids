@@ -25,6 +25,8 @@
    :angle 0
    :angle-idx 0
    :shape arrow-shape
+   :lives 3
+   :score 0
    })
 
 (defn rotate-left
@@ -54,7 +56,7 @@
         angle (:angle player)
         dx (limit-speed (+ (:dx player) (* cfg/thrust sa)))
         dy (limit-speed (+ (:dy player) (* cfg/thrust ca)))
-        [px py] (draw/rotate-around-point x (+ y 10) x y angle)]
+        [px py] (geom/rotate-around-point x (+ y 10) x y angle)]
 
     (dotimes [_ 2]
       (let [variance (- (rand 0.5) 0.25)
@@ -96,3 +98,7 @@
                                     (part/make-particle (:x player) (:y player)
                                                         dx dy
                                                         :colours ["white" "yellow"]))))))
+
+(defn add-score
+  [player score]
+  (assoc player :score (+ score (:score player))))

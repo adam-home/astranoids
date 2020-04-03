@@ -1,5 +1,19 @@
 (ns spacegame.drawing
-  (:require [spacegame.globals :as globals :refer [buffer-ctx screen-ctx]]))
+  (:require [spacegame.config :as cfg]
+            [spacegame.globals :as globals :refer [buffer-ctx screen-ctx]]))
+
+(def alphas {
+             "0" [ [[0 0] [8 0]] [[8 0] [8 16]] [[8 16] [0 16]] [[0 16] [0 0]] ]
+             "1" [ [[4 0] [4 16]] ]
+             "2" [ [[0 0] [8 0]] [[8 0] [8 8]] [[8 8] [0 8]] [[0 8] [0 16]] [[0 16] [8 16]] ]
+             "3" [ [[0 0] [8 0]] [[8 0] [8 16]] [[8 16] [0 16]] [[8 8] [0 8]] ]
+             "4" [ [[0 0] [0 8]] [[0 8] [8 8]] [[8 0] [8 16]] ]
+             "5" [ [[8 0] [0 0]] [[0 0] [0 8]] [[0 8] [8 8]] [[8 8] [8 16]] [[8 16] [0 16]] ]
+             "6" [ [[8 0] [0 0]] [[0 0] [0 16]] [[0 16] [8 16]] [[8 16] [8 8]] [[8 8] [0 8]] ]
+             "7" [ [[0 0] [8 0]] [[8 0] [8 16]] ]
+             "8" [ [[0 0] [8 0]] [[8 0] [8 16]] [[8 16] [0 16]] [[0 16] [0 0]] [[0 8] [8 8]]]
+             "9" [ [[8 8] [0 8]] [[0 8] [0 0]] [[0 0] [8 0]] [[8 0] [8 16]] [[8 16] [0 16]] ]
+             })
 
 (defn get-elem-by-id
   [elem-id]
@@ -11,7 +25,7 @@
   (let [target-elem (get-elem-by-id target-elem-id)
         canvas-elem (.createElement js/document "canvas")
         buffer (.createElement js/document "canvas")]
-    (console.log (str "id=" id))
+
     (when id (set! (.-id canvas-elem) id))
     (set! (.-width canvas-elem) width)
     (set! (.-height canvas-elem) height)
@@ -66,13 +80,24 @@
   
   (.restore buffer-ctx))
 
-(defn rotate-around-point
-  [x y origin-x origin-y angle]
-  (let [sa (Math/sin angle)
-        ca (Math/cos angle)
-        dx (- x origin-x)
-        dy (- y origin-y)]
+(defn draw-lives
+  [player]
+  (doseq [life (range 0 (:lives player))]
+    (draw-shape (:shape player)
+                :x (+ 16 (* life 16))
+                :y 16)))
 
-    [(+ (- (* ca dx) (* sa dy)) origin-x)
-     (+ (+ (* sa dx) (* ca dy)) origin-y)]))
+(defn draw-char
+  [char x y]
+  (draw-shape (get alphas char) :x x :y y))
+
+(defn draw-score
+  [score]
+  (let [str-score (clojure.string/reverse (str score))
+        digits (count str-score)
+        [w h] cfg/default-canvas-size]
+    (loop [i 0]
+      (when (< i digits)
+        (draw-char (nth str-score i) (- w (* (inc i) digits 10)) 4)
+        (recur (inc i))))))
 
