@@ -27,6 +27,7 @@
    :shape arrow-shape
    :lives 3
    :score 0
+   :shield 250
    })
 
 (defn rotate-left
@@ -76,9 +77,13 @@
                  :else x)
         yy (cond (< y 0) h
                  (> y h) 0
-                 :else y)]
+                 :else y)
+        shield (:shield player)]
 
-    (assoc player :x xx :y yy)))
+    (assoc player
+           :x xx
+           :y yy
+           :shield (if (> shield 0) (dec shield) 0))))
 
 (defn draw-player
   [player]
@@ -87,7 +92,10 @@
                    :x (:x player)
                    :y (:y player)
                    :angle (:angle player)
-                   :scale 1 :width 2))
+                   :scale 1 :width 2)
+
+  (when (> (:shield player) 0)
+    (draw/draw-shield player)))
 
 ;; Create a load of particles at the player's location, expanding away
 (defn explode

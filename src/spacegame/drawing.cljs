@@ -80,6 +80,21 @@
   
   (.restore buffer-ctx))
 
+(defn draw-shield
+  [player]
+
+  ;; Shield flickers
+  (when (= 1 (mod (:shield player) 2))
+    (.save buffer-ctx)
+    (.beginPath buffer-ctx)
+    (.arc buffer-ctx (:x player) (:y player) 20 0 globals/circle)
+    (set! (.-shadowBlur buffer-ctx) 8)
+    (set! (.-shadowColor buffer-ctx) "white")
+    (set! (.-lineWidth buffer-ctx) 2)
+    (set! (.-strokeStyle buffer-ctx) "white")
+    (.stroke buffer-ctx)
+    (.restore buffer-ctx)))
+
 (defn draw-lives
   [player]
   (doseq [life (range 0 (:lives player))]

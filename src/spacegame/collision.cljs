@@ -86,7 +86,8 @@
             box-translated (geom/translate-box (:box asteroid) (:x asteroid) (:y asteroid)) ]
         
         ;; Check to see if any of the asteroids have hit the player
-        (when (polygons-intersect? asteroid-translated player-translated)
+        (when (and (= 0 (:shield player))
+                   (polygons-intersect? asteroid-translated player-translated))
           (player/explode player)
           (set! player (player/make-player (/ (first cfg/default-canvas-size) 2)
                                            (/ (second cfg/default-canvas-size) 2))))
