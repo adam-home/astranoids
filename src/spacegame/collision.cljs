@@ -85,12 +85,13 @@
       (let [asteroid-translated (geom/translate-shape (:shape asteroid) (:x asteroid) (:y asteroid))
             box-translated (geom/translate-box (:box asteroid) (:x asteroid) (:y asteroid)) ]
         
-        ;; Check to see if any of the asteroids have hit the player
+        ;; Check to see if any of the asteroids have hit the player.
+        ;; If player has a shield, they are invulnerable.
         (when (and (= 0 (:shield player))
                    (polygons-intersect? asteroid-translated player-translated))
+          (set! player (update player :lives dec))
           (player/explode player)
-          (set! player (player/make-player (/ (first cfg/default-canvas-size) 2)
-                                           (/ (second cfg/default-canvas-size) 2))))
+          (set! player (player/reset-player player)))
 
         ;; Check to see if any of the asteroids have been hit by a bullet
         (doseq [bullet globals/bullets]

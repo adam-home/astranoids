@@ -24,8 +24,7 @@
 
 (defonce app-state (atom {:text "Hello world!"}))
 
-(set! player (player/make-player (/ (first cfg/default-canvas-size) 2)
-                                 (/ (second cfg/default-canvas-size) 2)))
+(set! player (player/make-player))
 
 (.addEventListener js/window ;; (get-elem-by-id "game-canvas")
                    "keydown"

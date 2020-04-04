@@ -16,19 +16,30 @@
    [[0 5] [-7 10]]
   ])
 
-(defn make-player [x y]
-  {
-   :x x
-   :y y
-   :dx 0
-   :dy 0
-   :angle 0
-   :angle-idx 0
-   :shape arrow-shape
-   :lives 3
-   :score 0
-   :shield 250
-   })
+(defn make-player
+  []
+  (let [[w h] cfg/default-canvas-size
+        x (/ w 2)
+        y (/ h 2)]
+    {
+     :x x
+     :y y
+     :dx 0
+     :dy 0
+     :angle 0
+     :angle-idx 0
+     :shape arrow-shape
+     :lives 3
+     :score 0
+     :shield 250
+     }))
+
+(defn reset-player
+  [player]
+  (let [new-player (make-player)]
+    (assoc new-player
+           :score (:score player)
+           :lives (:lives player))))
 
 (defn rotate-left
   [player]
