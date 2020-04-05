@@ -45,6 +45,8 @@
 
   (draw/clear-canvas)
 
+  (draw/draw-string-centre "ASTRANOIDS" 4)
+  
   (draw/draw-lives player)
   (draw/draw-score (:score player))
   
@@ -58,9 +60,7 @@
   ;; Show message if all lives lost
   ;; If still alive, process keypresses
   (if (<= (:lives player) 0)
-    (let [text "GAME OVER"
-          [x y] (geom/centre-text text)]
-      (draw/draw-string text x y))
+    (draw/draw-string-centre "GAME OVER")
     (input/process-keys))
   
   (draw/flip)

@@ -1,6 +1,7 @@
 (ns spacegame.drawing
   (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals :refer [buffer-ctx screen-ctx]]))
+            [spacegame.globals :as globals :refer [buffer-ctx screen-ctx]]
+            [spacegame.geometry :as geom]))
 
 (def alphas {
              \0 [ [[0 0] [8 0]] [[8 0] [8 16]] [[8 16] [0 16]] [[0 16] [0 0]] ]
@@ -17,12 +18,18 @@
              \space [ ]
              
              \A [ [[0 16] [0 0]] [[0 0] [8 0]] [[8 0] [8 16]] [[0 8] [8 8]] ]
+             \D [ [[0 0] [4 0]] [[4 0] [8 8]] [[8 8] [8 16]] [[8 16] [0 16]] [[0 16] [0 0]] ]
              \E [ [[8 0] [0 0]] [[0 0] [0 16]] [[0 16] [8 16]] [[0 8] [8 8]] ]
              \G [ [[8 8] [8 16]] [[8 16] [0 16]] [[0 16] [0 0]] [[0 0] [8 0]] ]
+             \I [ [[4 0] [4 16]] ]
              \M [ [[0 16] [0 0]] [[0 0] [8 0]] [[8 0] [8 16]] [[4 0] [4 8]] ]
+             \N [ [[0 16] [0 0]] [[0 0] [8 16]] [[8 16] [8 0]] ]
              \O [ [[0 0] [8 0]] [[8 0] [8 16]] [[8 16] [0 16]] [[0 16] [0 0]] ]
              \R [ [[0 16] [0 0]] [[0 0] [8 0]] [[8 0] [8 8]] [[8 8] [0 8]] [[0 8] [8 16]] ]
+             \S [ [[8 0] [0 0]] [[0 0] [0 8]] [[0 8] [8 8]] [[8 8] [8 16]] [[8 16] [0 16]] ]
+             \T [ [[0 0] [8 0]] [[4 0] [4 16]] ]
              \V [ [[0 0] [0 8]] [[0 8] [4 16]] [[4 16] [8 8]] [[8 8] [8 0]] ]
+             
              })
 
 (defn get-elem-by-id
@@ -135,3 +142,12 @@
     (when-not (empty? chars)
       (draw-char (first chars) xx y)
       (recur (rest chars) (+ 16 xx)))))
+
+(defn draw-string-centre
+  ([text]
+   (let [[cx cy] (geom/centre-text text)]
+     (draw-string text cx cy)))
+  
+  ([text y]
+   (let [[cx cy] (geom/centre-text text)]
+     (draw-string text cx y))))
