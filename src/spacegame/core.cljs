@@ -24,56 +24,66 @@
 
 (defonce app-state (atom {:text "Hello world!"}))
 
-(set! player (player/make-player))
-
 (.addEventListener js/window ;; (get-elem-by-id "game-canvas")
                    "keydown"
                    (fn [evt]
-                     (set! globals/keys-down (conj globals/keys-down (.-keyCode evt))))
+                     (set! input/keys-down (conj input/keys-down (.-keyCode evt))))
                    true)
 
 (.addEventListener js/window
                    "keyup"
                    (fn [evt]
-                     (set! globals/keys-down (disj globals/keys-down (.-keyCode evt))))
+                     (set! input/keys-down (disj input/keys-down (.-keyCode evt))))
                    true)
 
 (defn main-loop
   []
 
-  (collision/check-for-collisions)
-
   (draw/clear-canvas)
 
-  (draw/draw-string-centre "ASTRANOIDS" 4)
+  (draw/draw-string-centre "ASTRANOIDS" :y 4)
 
-  (when (> globals/new-level-timer 0)
-    (set! globals/new-level-timer (dec globals/new-level-timer))
-    (let [[w h] cfg/default-canvas-size
-          y (- (/ h 2) 60)]
-      (draw/draw-string-centre (str "LEVEL " globals/level) y)))
+  (if (not globals/game-started)
+    (do
+      (input/process-keys-attract-mode)
+      (draw/draw-string-centre "PRESS 1 TO PLAY" :y-offset -40))
+
+    (do
+      (collision/check-for-collisions)
+
+      (when (> globals/new-level-timer 0)
+        (set! globals/new-level-timer (dec globals/new-level-timer))
+        (draw/draw-string-centre (str "LEVEL " globals/level) :y-offset -20))
   
-  (draw/draw-lives player)
-  (draw/draw-score (:score player))
-  
+      ;; Show message if all lives lost
+      ;; If still alive, process keypresses
+      (if (<= (:lives player) 0)
+        (do
+          (draw/draw-string-centre "GAME OVER")
+          (set! globals/game-started false))
+        (input/process-keys))))
+
   (when (> (:lives player) 0)
     (player/draw-player player))
-  
+
+  (draw/draw-lives player)
+  (draw/draw-score (:score player))
+    
   (part/draw-particles particles)
   (bullet/draw-bullets bullets)
+
+  ;; Always draw asteroids
   (asteroid/draw-asteroids asteroids)
 
-  ;; Show message if all lives lost
-  ;; If still alive, process keypresses
-  (if (<= (:lives player) 0)
-    (draw/draw-string-centre "GAME OVER")
-    (input/process-keys))
-  
   (draw/flip)
 
-  (set! player (player/move-player player))
+  (when globals/game-started
+    (set! player (player/move-player player)))
+
   (set! particles (part/move-particles particles))
   (set! bullets (bullet/move-bullets bullets))
+
+  ;; Always move asteroids
   (set! asteroids (asteroid/move-asteroids asteroids))
 
   (when (empty? asteroids)
@@ -87,7 +97,7 @@
                             (main-loop)
 
                             ;; Fire button doesn't repeat
-                            (set! globals/keys-down (disj globals/keys-down globals/KEY_L_CTRL))
+                            (set! input/keys-down (disj input/keys-down input/KEY_L_CTRL))
 
                             )))
 

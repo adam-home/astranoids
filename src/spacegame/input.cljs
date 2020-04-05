@@ -3,17 +3,36 @@
             [spacegame.player :as player]
             [spacegame.bullet :as bullet]))
 
+(def KEY_LEFT 37)
+(def KEY_RIGHT 39)
+(def KEY_UP 38)
+(def KEY_L_CTRL 17)
+(def KEY_1 49)
+
+(def keys-down #{})
+
 (defn process-keys
   []
-  (when (contains? globals/keys-down globals/KEY_LEFT)
+  (when (contains? keys-down KEY_LEFT)
     (set! player (player/rotate-left player)))
 
-  (when (contains? globals/keys-down globals/KEY_RIGHT)
+  (when (contains? keys-down KEY_RIGHT)
     (set! player (player/rotate-right player)))
 
-  (when (contains? globals/keys-down globals/KEY_UP)
+  (when (contains? keys-down KEY_UP)
     (set! player (player/thrust player)))
 
-  (and (contains? globals/keys-down globals/KEY_L_CTRL)
+  (and (contains? keys-down KEY_L_CTRL)
        (> 5 (count bullets))
        (set! bullets (conj bullets (bullet/make-bullet player)))))
+
+(defn process-keys-attract-mode
+  []
+  (when (contains? keys-down KEY_1)
+    (set! globals/level 0)
+    (set! globals/new-level-timer 100)
+    (set! globals/asteroids #{})
+    (set! globals/bullets #{})
+    (set! globals/particles [])
+    (set! globals/player (player/make-player))
+    (set! globals/game-started true)))
