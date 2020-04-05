@@ -9,6 +9,7 @@
 (def asteroids #{})
 
 (def level 0)
+(def new-level-timer 100)
 
 (def screen-ctx nil)
 (def buffer-ctx nil)

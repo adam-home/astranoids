@@ -6,4 +6,6 @@
 (def thrust 0.1)
 (def max-speed 4)
 
+(def level-message-timeout 250)
+
 (def default-canvas-size [1400 600])

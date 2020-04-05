@@ -46,6 +46,12 @@
   (draw/clear-canvas)
 
   (draw/draw-string-centre "ASTRANOIDS" 4)
+
+  (when (> globals/new-level-timer 0)
+    (set! globals/new-level-timer (dec globals/new-level-timer))
+    (let [[w h] cfg/default-canvas-size
+          y (- (/ h 2) 60)]
+      (draw/draw-string-centre (str "LEVEL " globals/level) y)))
   
   (draw/draw-lives player)
   (draw/draw-score (:score player))
@@ -73,6 +79,7 @@
   (when (empty? asteroids)
     (set! globals/level (inc globals/level))
     (set! player (assoc player :shield 250))
+    (set! globals/new-level-timer cfg/level-message-timeout)
     (asteroid/add-asteroids-to-game (+ 3 globals/level)))
   
   (.requestAnimationFrame js/window
