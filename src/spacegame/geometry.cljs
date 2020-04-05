@@ -1,4 +1,5 @@
-(ns spacegame.geometry)
+(ns spacegame.geometry
+  (:require [spacegame.config :as cfg]))
 
 (defn- translate-pair
   [pair dx dy]
@@ -63,3 +64,12 @@
               [(nth bounds 2) (nth bounds 3)])
       (do
         (recur (rest lines) (get-min-max-line (first lines) bounds))))))
+
+(defn centre-text
+  [text]
+  (let [[w h] cfg/default-canvas-size
+        digits (count text)
+        text-width (+ (* 8 digits) (* 8 (dec digits)))
+        x (/ (- w text-width) 2)
+        y (/ (- h 16) 2)]
+        [x y]))

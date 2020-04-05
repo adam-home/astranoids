@@ -6,6 +6,7 @@
             [spacegame.asteroid :as asteroid]
             [spacegame.bullet :as bullet]))
 
+
 ;; returns true iff the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
 ;; function intersects(a,b,c,d,p,q,r,s) {
 ;;   var det, gamma, lambda;
@@ -87,7 +88,7 @@
         
         ;; Check to see if any of the asteroids have hit the player.
         ;; If player has a shield, they are invulnerable.
-        (when (and (= 0 (:shield player))
+        (when (and (<= (:shield player) 0)
                    (polygons-intersect? asteroid-translated player-translated))
           (set! player (update player :lives dec))
           (player/explode player)

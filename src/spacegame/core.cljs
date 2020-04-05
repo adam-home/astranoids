@@ -43,18 +43,26 @@
 
   (collision/check-for-collisions)
 
-  (input/process-keys)
-
   (draw/clear-canvas)
 
   (draw/draw-lives player)
   (draw/draw-score (:score player))
   
-  (player/draw-player player)
+  (when (> (:lives player) 0)
+    (player/draw-player player))
+  
   (part/draw-particles particles)
   (bullet/draw-bullets bullets)
   (asteroid/draw-asteroids asteroids)
 
+  ;; Show message if all lives lost
+  ;; If still alive, process keypresses
+  (if (<= (:lives player) 0)
+    (let [text "GAME OVER"
+          [x y] (geom/centre-text text)]
+      (draw/draw-string text x y))
+    (input/process-keys))
+  
   (draw/flip)
 
   (set! player (player/move-player player))
@@ -64,6 +72,7 @@
 
   (when (empty? asteroids)
     (set! globals/level (inc globals/level))
+    (set! player (assoc player :shield 250))
     (asteroid/add-asteroids-to-game (+ 3 globals/level)))
   
   (.requestAnimationFrame js/window
