@@ -14,7 +14,6 @@
         [x y] (geom/rotate-around-point (:x player) (- (:y player) 10)
                                         (:x player) (:y player)
                                         (:angle player))]
-
     {
      :x x
      :y y

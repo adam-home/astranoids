@@ -82,28 +82,14 @@
 
   (set! particles (part/move-particles particles))
   (set! bullets (bullet/move-bullets bullets))
-
-  ;; Always move asteroids
   (set! asteroids (asteroid/move-asteroids asteroids))
 
-  ;; Do we need to start a new level
+  ;; Do we need to start a new level?
   (when (levels/level-complete)
-    (println "Completed level " globals/level)
-    ;; (set! globals/level (inc globals/level))
-    ;; (set! player (assoc player :shield 250))
     (set! globals/level (inc globals/level))
-    (println "Set level to " globals/level)
     (levels/level-init)
     (set! globals/new-level-timer cfg/level-message-timeout))
 
-
-  
-  ;; (when (empty? asteroids)
-  ;;   (set! globals/level (inc globals/level))
-  ;;   (set! player (assoc player :shield 250))
-  ;;   (set! globals/new-level-timer cfg/level-message-timeout)
-  ;;   (asteroid/add-asteroids-to-game (+ 3 globals/level)))
-  
   (.requestAnimationFrame js/window
                           (fn []
                             (main-loop)
