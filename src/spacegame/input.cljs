@@ -26,13 +26,3 @@
        (> 5 (count bullets))
        (set! bullets (conj bullets (bullet/make-bullet player)))))
 
-(defn process-keys-attract-mode
-  []
-  (when (contains? keys-down KEY_1)
-    (set! globals/level 0)
-    (set! globals/new-level-timer 100)
-    (set! globals/asteroids #{})
-    (set! globals/bullets #{})
-    (set! globals/particles [])
-    (set! globals/player (player/make-player))
-    (set! globals/game-started true)))

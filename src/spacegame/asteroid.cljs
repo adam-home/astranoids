@@ -67,19 +67,32 @@
      :generation generation
      }))
 
-(defn add-asteroids-to-game
+(defn make-asteroids
   [count]
-    (dotimes [_ count]
 
-      (let [x (rand (first cfg/default-canvas-size))
-            y (rand (second cfg/default-canvas-size))
-            dx (- 1 (rand 2))
-            dy (- 1 (rand 2))
-            a (make-asteroid x y 1)]
+  (into #{} (for [_ (range count)]
+              (let [x (rand (first cfg/default-canvas-size))
+                    y (rand (second cfg/default-canvas-size))
+                    dx (- 1 (rand 2))
+                    dy (- 1 (rand 2))
+                    a (make-asteroid x y 1)]
+                a))))
+
+  
+  ;; (let [asteroids #{}]
+  
+  ;;   (dotimes [_ count]
+      
+  ;;     (let [x (rand (first cfg/default-canvas-size))
+  ;;           y (rand (second cfg/default-canvas-size))
+  ;;           dx (- 1 (rand 2))
+  ;;           dy (- 1 (rand 2))
+  ;;           a (make-asteroid x y 1)]
         
-        ;; (set! globals/asteroids (conj globals/asteroids a))
-        (set! globals/asteroids (conj globals/asteroids a))
-        )))
+  ;;       ;; (set! globals/asteroids (conj globals/asteroids a))
+  ;;       (set! asteroids (conj asteroids a))))
+
+  ;;   asteroids))
 
 (defn draw-asteroid
   [asteroid]

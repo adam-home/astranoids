@@ -11,7 +11,7 @@
 (def level 0)
 (def new-level-timer 100)
 
-(def game-started false)
+(def games-played 0)
 
 (def screen-ctx nil)
 (def buffer-ctx nil)

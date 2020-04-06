@@ -9,8 +9,8 @@
         id (globals/next-id)
         sa (Math/sin (:angle player))
         ca (Math/cos (:angle player))
-        dx (+ (:dx player) (* 2 sa))
-        dy (+ (:dy player) (* 2 ca))
+        dx (+ (:dx player) (* 3 sa))
+        dy (+ (:dy player) (* 3 ca))
         [x y] (geom/rotate-around-point (:x player) (- (:y player) 10)
                                         (:x player) (:y player)
                                         (:angle player))]
