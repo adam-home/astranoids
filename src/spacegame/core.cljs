@@ -1,12 +1,13 @@
 (ns spacegame.core
   (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals :refer [player bullets asteroids particles]]
+            [spacegame.globals :as globals :refer [player bullets asteroids particles stars]]
             [spacegame.input :as input]
             [spacegame.drawing :as draw]
             [spacegame.player :as player]
             [spacegame.particle :as part]
             [spacegame.bullet :as bullet]
             [spacegame.asteroid :as asteroid]
+            [spacegame.star :as star]
             [spacegame.geometry :as geom]
             [spacegame.collision :as collision]
             [spacegame.levels :as levels]))
@@ -74,12 +75,16 @@
   (part/draw-particles particles)
   (bullet/draw-bullets bullets)
   (asteroid/draw-asteroids asteroids)
-
+  (star/draw-stars stars)
+  
   (draw/flip)
 
   (when (> globals/level 0)
     (set! player (player/move-player player)))
 
+  (doseq [star stars]
+    (star/apply-gravity star player))
+  
   (set! particles (part/move-particles particles))
   (set! bullets (bullet/move-bullets bullets))
   (set! asteroids (asteroid/move-asteroids asteroids))

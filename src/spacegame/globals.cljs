@@ -7,6 +7,7 @@
 (def particles [])
 (def bullets #{})
 (def asteroids #{})
+(def stars #{})
 
 (def level 0)
 (def new-level-timer 100)

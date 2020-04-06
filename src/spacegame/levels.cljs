@@ -2,6 +2,7 @@
   (:require [spacegame.globals :as globals :refer [level]]
             [spacegame.input :as input]
             [spacegame.asteroid :as asteroid]
+            [spacegame.star :as star]
             [spacegame.player :as player]))
 
 ;; level 0 is attract mode
@@ -15,6 +16,7 @@
   (set! globals/asteroids (asteroid/make-asteroids 1))
   (set! globals/bullets #{})
   (set! globals/particles [])
+  (set! globals/stars (into #{} (star/make-star 100 100)))
   (set! globals/player (player/make-player)))
 
 (defn level-init-2
