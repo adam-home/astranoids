@@ -16,7 +16,7 @@
   (set! globals/asteroids (asteroid/make-asteroids 1))
   (set! globals/bullets #{})
   (set! globals/particles [])
-  (set! globals/stars (into #{} (star/make-star 100 100)))
+  (set! globals/stars (into #{} (star/make-star 400 300)))
   (set! globals/player (player/make-player)))
 
 (defn level-init-2

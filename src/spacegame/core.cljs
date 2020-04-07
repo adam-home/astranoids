@@ -82,8 +82,11 @@
   (when (> globals/level 0)
     (set! player (player/move-player player)))
 
+  ;; Apply gravity to vulnerable objects
   (doseq [star stars]
-    (star/apply-gravity star player))
+    (set! asteroids (star/apply-gravity-to-all star asteroids))
+    (set! bullets (star/apply-gravity-to-all star bullets))
+    (set! player (first (star/apply-gravity-to-all star (list player)))))
   
   (set! particles (part/move-particles particles))
   (set! bullets (bullet/move-bullets bullets))
