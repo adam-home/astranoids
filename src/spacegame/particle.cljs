@@ -1,11 +1,12 @@
 (ns spacegame.particle
-  (:require [spacegame.globals :as globals]))
+  (:require [spacegame.globals :as globals :refer [draw-object]]))
 
 (def DEFAULT-PARTICLE-COLOURS ["red" "orange" "yellow"])
 
 (defn make-particle [x y dx dy & {:keys [colours]}]
   (let [colour-vec (or colours DEFAULT-PARTICLE-COLOURS)]
     {
+     :object-type :particle
      :x x
      :y y
      :dx dx
@@ -16,7 +17,7 @@
                   (Math/round (rand (dec (count colour-vec)))))
      }))
 
-(defn draw-particle
+(defmethod draw-object :particle
   [particle]
 
   (.beginPath globals/buffer-ctx)
@@ -26,13 +27,6 @@
          2 2)
   (set! (.-fillStyle globals/buffer-ctx) (:colour particle))
   (.fill globals/buffer-ctx))
-
-(defn draw-particles
-  [particles]
-  (.save globals/buffer-ctx)
-  (doseq [p particles]
-    (draw-particle p))
-  (.restore globals/buffer-ctx))
 
 (defn move-particle
   [particle]

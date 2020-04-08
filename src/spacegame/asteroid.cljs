@@ -1,6 +1,6 @@
 (ns spacegame.asteroid
   (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals]
+            [spacegame.globals :as globals :refer [draw-object]]
             [spacegame.drawing :as draw]
             [spacegame.geometry :as geom]
             [spacegame.particle :as part]))
@@ -57,6 +57,7 @@
         [dx dy] (geom/vector-to-dx-dy (rand globals/circle) (+ 1 (rand generation)))
         id (globals/next-id)]
     {
+     :object-type :asteroid
      :id id
      :x x
      :y y
@@ -77,21 +78,6 @@
                     dy (- 1 (rand 2))
                     a (make-asteroid x y 1)]
                 a))))
-
-(defn draw-asteroid
-  [asteroid]
-  (draw/draw-shape (:shape asteroid)
-                   :x (:x asteroid) :y (:y asteroid)
-                   :angle 0 :scale 1 :width 2
-                   :colour "green"
-                   :fill "black"))
-
-(defn draw-asteroids
-  [asteroids]
-  (.save globals/buffer-ctx)
-  (doseq [a asteroids]
-    (draw-asteroid a))
-  (.restore globals/buffer-ctx))
 
 (defn move-asteroid
   [asteroid]
@@ -122,3 +108,11 @@
 (defn remove-asteroid
   [asteroid]
   (set! globals/asteroids (disj globals/asteroids asteroid)))
+
+(defmethod draw-object :asteroid
+  [asteroid]
+  (draw/draw-shape (:shape asteroid)
+                   :x (:x asteroid) :y (:y asteroid)
+                   :angle 0 :scale 1 :width 2
+                   :colour "green"
+                   :fill "black"))

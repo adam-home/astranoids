@@ -151,3 +151,10 @@
     (if y
       (draw-string text cx y)
       (draw-string text cx (+ cy y-offset)))))
+
+(defn draw-objects
+  [objects]
+  (.save globals/buffer-ctx)
+  (doseq [o objects]
+    (globals/draw-object o))
+  (.restore globals/buffer-ctx))

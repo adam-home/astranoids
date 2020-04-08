@@ -21,3 +21,4 @@
   (let [x (atom 0)]
     (fn [] (keyword (str "id-" (swap! x inc))))))
 
+(defmulti draw-object :object-type)

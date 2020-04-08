@@ -1,6 +1,6 @@
 (ns spacegame.bullet
   (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals]
+            [spacegame.globals :as globals :refer [draw-object]]
             [spacegame.drawing :as draw]
             [spacegame.geometry :as geom]))
 
@@ -15,6 +15,7 @@
                                         (:x player) (:y player)
                                         (:angle player))]
     {
+     :object-type :bullet
      :x x
      :y y
      :dx dx
@@ -22,28 +23,6 @@
      :lifetime 300
      :age 0
      }))
-
-(defn draw-bullet
-  [bullet]
-  (.beginPath globals/buffer-ctx)
-  ;;(.rect ctx (:x bullet) (:y bullet) 4 4)
-  (.arc globals/buffer-ctx
-        (:x bullet) (:y bullet)
-        2
-        0
-        (* 2 Math.PI))
-
-  (set! (.-fillStyle globals/buffer-ctx) "white")
-  (set! (.-shadowBlur globals/buffer-ctx) 8)
-  (set! (.-shadowColor globals/buffer-ctx) "green")
-  (.fill globals/buffer-ctx))
-
-(defn draw-bullets
-  [bullets]
-  (.save globals/buffer-ctx)
-  (doseq [b bullets]
-    (draw-bullet b))
-  (.restore globals/buffer-ctx))
 
 (defn move-bullet
   [bullet]
@@ -67,3 +46,18 @@
 (defn remove-bullet
   [bullet]
   (set! globals/bullets (disj globals/bullets bullet)))
+
+(defmethod draw-object :bullet
+  [bullet]
+  (.beginPath globals/buffer-ctx)
+  ;;(.rect ctx (:x bullet) (:y bullet) 4 4)
+  (.arc globals/buffer-ctx
+        (:x bullet) (:y bullet)
+        2
+        0
+        (* 2 Math.PI))
+  
+  (set! (.-fillStyle globals/buffer-ctx) "white")
+  (set! (.-shadowBlur globals/buffer-ctx) 8)
+  (set! (.-shadowColor globals/buffer-ctx) "green")
+  (.fill globals/buffer-ctx))

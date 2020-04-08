@@ -1,6 +1,6 @@
 (ns spacegame.player
   (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals]
+            [spacegame.globals :as globals :refer [draw-object]]
             [spacegame.drawing :as draw]
             [spacegame.geometry :as geom]
             [spacegame.particle :as part]))
@@ -22,6 +22,7 @@
         x (/ w 2)
         y (/ h 2)]
     {
+     :object-type :player
      :x x
      :y y
      :dx 0
@@ -96,7 +97,7 @@
            :y yy
            :shield (if (> shield 0) (dec shield) 0))))
 
-(defn draw-player
+(defmethod draw-object :player
   [player]
   (draw/draw-shape (:shape player)
                    :colour "yellow"

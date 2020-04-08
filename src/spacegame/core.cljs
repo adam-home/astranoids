@@ -1,6 +1,6 @@
 (ns spacegame.core
-  (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals :refer [player bullets asteroids particles stars]]
+  (:require [spacegame.globals :as globals :refer [player bullets asteroids particles stars]]
+            [spacegame.config :as cfg]
             [spacegame.input :as input]
             [spacegame.drawing :as draw]
             [spacegame.player :as player]
@@ -67,15 +67,15 @@
         (input/process-keys))))
   
   (when (> (:lives player) 0)
-    (player/draw-player player))
+    (draw/draw-objects (list player)))
 
   (draw/draw-lives player)
   (draw/draw-score (:score player))
     
-  (part/draw-particles particles)
-  (bullet/draw-bullets bullets)
-  (asteroid/draw-asteroids asteroids)
-  (star/draw-stars stars)
+  (draw/draw-objects particles)
+  (draw/draw-objects bullets)
+  (draw/draw-objects asteroids)
+  (draw/draw-objects stars)
   
   (draw/flip)
 
