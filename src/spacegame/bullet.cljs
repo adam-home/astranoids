@@ -37,7 +37,9 @@
         yy (cond (< y 0) h
                  (> y h) 0
                  :else y)]
-    (assoc bullet :x xx :y yy :age age)))
+    (if (> age (:lifetime bullet))
+      nil
+      (assoc bullet :x xx :y yy :age age))))
 
 ;; (defn move-bullets
 ;;   [bullets]

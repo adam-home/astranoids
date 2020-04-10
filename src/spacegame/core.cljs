@@ -39,12 +39,16 @@
                      (set! input/keys-down (disj input/keys-down (.-keyCode evt))))
                    true)
 
+(defn move-objects-of-type
+  [type]
+  (filter (comp not nil?)  (map globals/move-object (type globals/scene))))
+
 (defn move-objects
   [objects]
   (set! globals/scene
         (assoc globals/scene
-               :asteroids (map globals/move-object (:asteroids globals/scene))
-               :bullets (map globals/move-object (:bullets globals/scene)))))
+               :asteroids (move-objects-of-type :asteroids)
+               :bullets (move-objects-of-type :bullets))))
 ;;  (into #{} (map globals/move-object objects)))
 
 (defn main-loop
