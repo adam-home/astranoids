@@ -49,7 +49,6 @@
         (assoc globals/scene
                :asteroids (move-objects-of-type :asteroids)
                :bullets (move-objects-of-type :bullets))))
-;;  (into #{} (map globals/move-object objects)))
 
 (defn main-loop
   []
@@ -96,23 +95,17 @@
     (set! player (player/move-player player)))
 
   ;; Apply gravity to vulnerable objects
-  ;; (doseq [star (filter #(= :star (:object-type %)) globals/scene)]
-  ;;   (set! player (first (star/apply-gravity-to-all star (list player))))
-  
-  ;;   (let [asteroids (filter #(= :asteroid (:object-type %)) globals/scene)]
-  ;;     ;; Remove asteroids from scene
-  ;;     (set! globals/scene (into #{} (remove #(= :asteroid (:object-type %)) globals/scene)))
-  ;;     ;; Add back in, with gravity applied
-  ;;     (set! globals/scene (into globals/scene (conj globals/scene (star/apply-gravity-to-all star asteroids))))))
+  (doseq [star (:stars globals/scene)]
+    (set! player (first (star/apply-gravity-to-all star (list player))))
 
-  ;; (set/union globals/scene (star/apply-gravity-to-all star asteroids))))
-    ;; (set! asteroids (star/apply-gravity-to-all star asteroids))
-  ;; (set! bullets (star/apply-gravity-to-all star bullets))
-
-  ;; (set! player (first (star/apply-gravity-to-all star (list player))))
+    (let [asteroids (:asteroids globals/scene)
+          bullets (:bullets globals/scene)]
+      (set! globals/scene
+            (assoc globals/scene
+                   :asteroids (star/apply-gravity-to-all star asteroids)
+                   :bullets (star/apply-gravity-to-all star bullets)))))
 
   (set! particles (part/move-particles particles))
-  ;; (set! bullets (bullet/move-bullets bullets))
 
   (set! globals/scene (move-objects globals/scene))
   
