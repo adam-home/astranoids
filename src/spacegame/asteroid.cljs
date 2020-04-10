@@ -92,14 +92,19 @@
                  :else y)]
     (assoc asteroid :x xx :y yy)))
 
+;; TODO Generate particles all at once then add to the scene in one go
+;; TODO Generic add-objects-to-scene function
 (defn explode
   [asteroid]
   (dotimes [_ 20]
     (let [[dx dy] (geom/vector-to-dx-dy (rand globals/circle) (rand 1))]
-      (set! globals/particles (conj globals/particles
-                                    (part/make-particle (:x asteroid) (:y asteroid)
-                                                        dx dy
-                                                        :colours ["green" "yellow"]))))))
+      (set! globals/scene
+            (update-in globals/scene [:particles]
+                       (fn [old]
+                         (conj old (part/make-particle (:x asteroid) (:y asteroid)
+                                                       dx dy
+                                                       :colours ["green" "yellow"]))))))))
+
 (defn remove-asteroid
   [asteroid]
   (let [asteroids (:asteroids globals/scene)]

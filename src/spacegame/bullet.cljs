@@ -41,11 +41,6 @@
       nil
       (assoc bullet :x xx :y yy :age age))))
 
-;; (defn move-bullets
-;;   [bullets]
-;;   (let [active (filter #(< (:age %) (:lifetime %)) bullets)]
-;;     (into #{} (map move-bullet active))))
-
 (defn remove-bullet
   [bullet]
   (let [bullets (:bullets globals/scene)]

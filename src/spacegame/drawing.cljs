@@ -168,4 +168,6 @@
     (globals/draw-object star))
   (doseq [bullet (:bullets globals/scene)]
     (globals/draw-object bullet))
+  (doseq [particle (:particles globals/scene)]
+    (globals/draw-object particle))
   (.restore buffer-ctx))

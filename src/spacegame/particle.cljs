@@ -1,5 +1,6 @@
 (ns spacegame.particle
-  (:require [spacegame.globals :as globals :refer [draw-object]]))
+  (:require [spacegame.globals :as globals :refer [draw-object move-object]]
+            [spacegame.config :as cfg]))
 
 (def DEFAULT-PARTICLE-COLOURS ["red" "orange" "yellow"])
 
@@ -28,14 +29,18 @@
   (set! (.-fillStyle globals/buffer-ctx) (:colour particle))
   (.fill globals/buffer-ctx))
 
-(defn move-particle
+(defmethod move-object :particle
   [particle]
-  (assoc particle
-         :x (+ (:x particle) (:dx particle))
-         :y (- (:y particle) (:dy particle))
-         :age (inc (:age particle))))
-
-(defn move-particles
-  [particles]
-  (let [active (filter #(< (:age %) (:lifetime %)) particles)]
-    (map move-particle active)))
+  (let [x (+ (:x particle) (:dx particle))
+        y (- (:y particle) (:dy particle))
+        age (inc (:age particle))
+        [w h] cfg/default-canvas-size
+        xx (cond (< x 0) w
+                 (> x w) 0
+                 :else x)
+        yy (cond (< y 0) h
+                 (> y h) 0
+                 :else y)]
+    (if (> age (:lifetime particle))
+      nil
+      (assoc particle :x xx :y yy :age age))))

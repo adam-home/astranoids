@@ -1,6 +1,6 @@
 (ns spacegame.core
   (:require [clojure.set :as set]
-            [spacegame.globals :as globals :refer [player bullets asteroids particles stars]]
+            [spacegame.globals :as globals :refer [scene player]]
             [spacegame.config :as cfg]
             [spacegame.input :as input]
             [spacegame.drawing :as draw]
@@ -41,14 +41,15 @@
 
 (defn move-objects-of-type
   [type]
-  (filter (comp not nil?)  (map globals/move-object (type globals/scene))))
+  (filter (comp not nil?)  (map globals/move-object (type scene))))
 
 (defn move-objects
   [objects]
-  (set! globals/scene
-        (assoc globals/scene
+  (set! scene
+        (assoc scene
                :asteroids (move-objects-of-type :asteroids)
-               :bullets (move-objects-of-type :bullets))))
+               :bullets (move-objects-of-type :bullets)
+               :particles (move-objects-of-type :particles))))
 
 (defn main-loop
   []
@@ -86,28 +87,25 @@
 
   (draw/draw-scene)
   
-  (draw/draw-objects particles)
-  ;; (draw/draw-objects bullets)
-
   (draw/flip)
 
   (when (> globals/level 0)
     (set! player (player/move-player player)))
 
   ;; Apply gravity to vulnerable objects
-  (doseq [star (:stars globals/scene)]
+  (doseq [star (:stars scene)]
     (set! player (first (star/apply-gravity-to-all star (list player))))
 
-    (let [asteroids (:asteroids globals/scene)
-          bullets (:bullets globals/scene)]
-      (set! globals/scene
-            (assoc globals/scene
+    (let [asteroids (:asteroids scene)
+          bullets (:bullets scene)
+          particles (:particles scene)]
+      (set! scene
+            (assoc scene
                    :asteroids (star/apply-gravity-to-all star asteroids)
-                   :bullets (star/apply-gravity-to-all star bullets)))))
+                   :bullets (star/apply-gravity-to-all star bullets)
+                   :particles (star/apply-gravity-to-all star particles)))))
 
-  (set! particles (part/move-particles particles))
-
-  (set! globals/scene (move-objects globals/scene))
+  (set! scene (move-objects scene))
   
   ;; Do we need to start a new level?
   (when (levels/level-complete)

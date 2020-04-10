@@ -5,11 +5,7 @@
 (def player nil)
 
 (def scene {})
-
-(def particles [])
-(def bullets #{})
-(def asteroids #{})
-(def stars #{})
+; (def particles [])
 
 (def level 0)
 (def new-level-timer 100)

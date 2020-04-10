@@ -74,8 +74,10 @@
     (dotimes [_ 2]
       (let [variance (- (rand 0.5) 0.25)
             [pdx pdy] (geom/vector-to-dx-dy (- angle Math.PI variance) 2)]
-        (set! globals/particles (conj globals/particles
-                                      (part/make-particle px py pdx pdy)))))
+        (set! globals/scene
+              (update-in globals/scene [:particles]
+                         (fn [old]
+                           (conj old (part/make-particle px py pdx pdy)))))))
                                   
     (assoc player :dx dx :dy dy)))
 
