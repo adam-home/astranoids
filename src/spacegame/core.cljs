@@ -119,10 +119,6 @@
   (.requestAnimationFrame js/window
                           (fn []
                             (main-loop)
-
-                            ;; Fire button doesn't repeat
-                            (set! input/keys-down (disj input/keys-down input/KEY_L_CTRL))
-
                             )))
 
 (let [[game-canvas buffer] (draw/create-canvas "canvas-container"
