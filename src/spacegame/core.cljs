@@ -1,5 +1,6 @@
 (ns spacegame.core
-  (:require [spacegame.globals :as globals :refer [player bullets asteroids particles stars]]
+  (:require [clojure.set :as set]
+            [spacegame.globals :as globals :refer [player bullets asteroids particles stars]]
             [spacegame.config :as cfg]
             [spacegame.input :as input]
             [spacegame.drawing :as draw]
@@ -38,6 +39,12 @@
                      (set! input/keys-down (disj input/keys-down (.-keyCode evt))))
                    true)
 
+(defn move-objects
+  [objects]
+  (set! globals/scene
+                (assoc globals/scene :asteroids (map globals/move-object (:asteroids globals/scene)))))
+;;  (into #{} (map globals/move-object objects)))
+
 (defn main-loop
   []
 
@@ -71,11 +78,14 @@
 
   (draw/draw-lives player)
   (draw/draw-score (:score player))
-    
+
+  (draw/draw-scene)
+  
   (draw/draw-objects particles)
   (draw/draw-objects bullets)
-  (draw/draw-objects asteroids)
-  (draw/draw-objects stars)
+
+  ;; (draw/draw-objects asteroids)
+  ;; (draw/draw-objects stars)
   
   (draw/flip)
 
@@ -83,15 +93,26 @@
     (set! player (player/move-player player)))
 
   ;; Apply gravity to vulnerable objects
-  (doseq [star stars]
-    (set! asteroids (star/apply-gravity-to-all star asteroids))
-    (set! bullets (star/apply-gravity-to-all star bullets))
-    (set! player (first (star/apply-gravity-to-all star (list player)))))
+  ;; (doseq [star (filter #(= :star (:object-type %)) globals/scene)]
+  ;;   (set! player (first (star/apply-gravity-to-all star (list player))))
   
+  ;;   (let [asteroids (filter #(= :asteroid (:object-type %)) globals/scene)]
+  ;;     ;; Remove asteroids from scene
+  ;;     (set! globals/scene (into #{} (remove #(= :asteroid (:object-type %)) globals/scene)))
+  ;;     ;; Add back in, with gravity applied
+  ;;     (set! globals/scene (into globals/scene (conj globals/scene (star/apply-gravity-to-all star asteroids))))))
+
+  ;; (set/union globals/scene (star/apply-gravity-to-all star asteroids))))
+    ;; (set! asteroids (star/apply-gravity-to-all star asteroids))
+  ;; (set! bullets (star/apply-gravity-to-all star bullets))
+
+  ;; (set! player (first (star/apply-gravity-to-all star (list player))))
+
   (set! particles (part/move-particles particles))
   (set! bullets (bullet/move-bullets bullets))
-  (set! asteroids (asteroid/move-asteroids asteroids))
 
+  (set! globals/scene (move-objects globals/scene))
+  
   ;; Do we need to start a new level?
   (when (levels/level-complete)
     (set! globals/level (inc globals/level))

@@ -79,10 +79,27 @@
                          ]]
         (polygons-intersect? shape bullet-shape)))))
 
+(defn bullet-kill-asteroid
+  [asteroid bullet]
+  ;; Check to see if any of the asteroids have been hit by a bullet
+  (set! player (player/add-score player 1))
+  (asteroid/explode asteroid)
+  (asteroid/remove-asteroid asteroid)
+  (bullet/remove-bullet bullet)
+  
+  (if (> 3 (:generation asteroid))
+    (dotimes [_ 2]
+      (set! globals/scene
+            (update-in globals/scene [:asteroids]
+                       (fn [old]
+                         (conj old (asteroid/make-asteroid (:x asteroid) (:y asteroid)
+                                                               (inc (:generation asteroid))))))))))
+
 (defn check-for-collisions
   []
-  (let [player-translated (geom/translate-shape (:shape player) (:x player) (:y player))]
-    (doseq [asteroid globals/asteroids]
+  (let [player-translated (geom/translate-shape (:shape player) (:x player) (:y player))
+        asteroids (:asteroids globals/scene)]
+    (doseq [asteroid asteroids]
       (let [asteroid-translated (geom/translate-shape (:shape asteroid) (:x asteroid) (:y asteroid))
             box-translated (geom/translate-box (:box asteroid) (:x asteroid) (:y asteroid)) ]
         
@@ -94,18 +111,7 @@
           (player/explode player)
           (set! player (player/reset-player player)))
 
-        ;; Check to see if any of the asteroids have been hit by a bullet
         (doseq [bullet globals/bullets]
           (when (bullet-intersect? asteroid-translated box-translated bullet)
-            (set! player (player/add-score player 1))
-            (asteroid/explode asteroid)
-            (asteroid/remove-asteroid asteroid)
-            (bullet/remove-bullet bullet)
+            (bullet-kill-asteroid asteroid bullet)))))))
 
-            (if (> 3 (:generation asteroid))
-              (dotimes [_ 2]
-                (set! globals/asteroids
-                      (conj globals/asteroids
-                            (asteroid/make-asteroid (:x asteroid) (:y asteroid)
-                                                    (inc (:generation asteroid)))))
-                ))))))))

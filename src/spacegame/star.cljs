@@ -1,6 +1,6 @@
 (ns spacegame.star
   (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals :refer [draw-object]]
+            [spacegame.globals :as globals :refer [draw-object move-object]]
             [spacegame.drawing :as draw]
             [spacegame.geometry :as geom]))
 
@@ -12,7 +12,7 @@
 
 (defn make-star
   [x y]
-  (list {
+  {
          :object-type :star
          :id (globals/next-id)
          :x x
@@ -20,7 +20,7 @@
          :shape star-shape
          :box (geom/bounding-box star-shape)
          :mass 250
-         }))
+   })
 
 (defmethod draw-object :star
   [star]
@@ -28,6 +28,10 @@
                    :x (:x star)
                    :y (:y star)
                    :colour "yellow"))
+
+(defmethod move-object :star
+  [star]
+  star)
 
 (defn apply-gravity
   [star target]

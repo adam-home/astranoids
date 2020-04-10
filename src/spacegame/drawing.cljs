@@ -154,7 +154,16 @@
 
 (defn draw-objects
   [objects]
-  (.save globals/buffer-ctx)
-  (doseq [o objects]
-    (globals/draw-object o))
-  (.restore globals/buffer-ctx))
+  (.save buffer-ctx)
+  (doseq [obj objects]
+    (globals/draw-object obj))
+  (.restore buffer-ctx))
+
+(defn draw-scene
+  []
+  (.save buffer-ctx)
+  (doseq [asteroid (:asteroids globals/scene)]
+    (globals/draw-object asteroid))
+  (doseq [star (:stars globals/scene)]
+    (globals/draw-object star))
+  (.restore buffer-ctx))

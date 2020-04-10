@@ -1,6 +1,6 @@
 (ns spacegame.asteroid
   (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals :refer [draw-object]]
+            [spacegame.globals :as globals :refer [draw-object move-object]]
             [spacegame.drawing :as draw]
             [spacegame.geometry :as geom]
             [spacegame.particle :as part]))
@@ -79,7 +79,7 @@
                     a (make-asteroid x y 1)]
                 a))))
 
-(defn move-asteroid
+(defmethod move-object :asteroid
   [asteroid]
   (let [x (+ (:x asteroid) (:dx asteroid))
         y (- (:y asteroid) (:dy asteroid))
@@ -92,9 +92,9 @@
                  :else y)]
     (assoc asteroid :x xx :y yy)))
 
-(defn move-asteroids
-  [asteroids]
-  (into #{} (map move-asteroid asteroids)))
+;; (defn move-asteroids
+;;   [asteroids]
+;;   (into #{} (map move-asteroid asteroids)))
 
 (defn explode
   [asteroid]
@@ -104,10 +104,12 @@
                                     (part/make-particle (:x asteroid) (:y asteroid)
                                                         dx dy
                                                         :colours ["green" "yellow"]))))))
-
 (defn remove-asteroid
   [asteroid]
-  (set! globals/asteroids (disj globals/asteroids asteroid)))
+  (let [asteroids (:asteroids globals/scene)]
+    (set! globals/scene
+          (assoc globals/scene
+                 :asteroids (remove #(= (:id asteroid) (:id %)) asteroids)))))
 
 (defmethod draw-object :asteroid
   [asteroid]

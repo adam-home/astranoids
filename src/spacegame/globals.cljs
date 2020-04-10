@@ -4,6 +4,8 @@
 
 (def player nil)
 
+(def scene {})
+
 (def particles [])
 (def bullets #{})
 (def asteroids #{})
@@ -22,3 +24,4 @@
     (fn [] (keyword (str "id-" (swap! x inc))))))
 
 (defmulti draw-object :object-type)
+(defmulti move-object :object-type)

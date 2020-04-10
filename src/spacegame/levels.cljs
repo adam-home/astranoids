@@ -8,21 +8,31 @@
 ;; level 0 is attract mode
 (defn level-init-0
   []
-  (set! globals/asteroids (asteroid/make-asteroids 4)))
+  (set! globals/scene
+        {
+         :asteroids (asteroid/make-asteroids 4)
+         }))
 
 (defn level-init-1
   []
   (set! globals/new-level-timer 100)
-  (set! globals/asteroids (asteroid/make-asteroids 1))
+  (set! globals/scene
+        {
+         :asteroids (asteroid/make-asteroids 1)
+         :stars (list (star/make-star 400 300))
+         })
   (set! globals/bullets #{})
   (set! globals/particles [])
-  (set! globals/stars (into #{} (star/make-star 400 300)))
   (set! globals/player (player/make-player)))
 
 (defn level-init-2
   []
   (set! globals/new-level-timer 100)
-  (set! globals/asteroids (asteroid/make-asteroids 2))
+  (set! globals/scene
+        {
+         :asteroids (asteroid/make-asteroids 2)
+         :stars (list (star/make-star 1000 300))
+         })
   (set! globals/bullets #{})
   (set! globals/particles [])
   (set! globals/player (player/reset-player globals/player)))
@@ -33,11 +43,11 @@
 
 (defn level-complete-1
   []
-  (empty? globals/asteroids))
+  (= 0 (count (:asteroids globals/scene))))
 
 (defn level-complete-2
   []
-  (empty? globals/asteroids))
+  (= 0 (count (:asteroids globals/scene))))
 
 (defn level-init
   []
