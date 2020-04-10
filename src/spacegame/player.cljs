@@ -116,10 +116,12 @@
   [player]
   (dotimes [_ 40]
     (let [[dx dy] (geom/vector-to-dx-dy (rand globals/circle) (rand 4))]
-      (set! globals/particles (conj globals/particles
-                                    (part/make-particle (:x player) (:y player)
-                                                        dx dy
-                                                        :colours ["white" "yellow"]))))))
+      (set! globals/scene
+            (update-in globals/scene [:particles]
+                       (fn [old]
+                         (conj old (part/make-particle (:x player) (:y player)
+                                                       dx dy
+                                                       :colours ["white" "yellow"]))))))))
 
 (defn add-score
   [player score]
