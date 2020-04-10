@@ -111,7 +111,7 @@
           (player/explode player)
           (set! player (player/reset-player player)))
 
-        (doseq [bullet globals/bullets]
+        (doseq [bullet (:bullets globals/scene)]
           (when (bullet-intersect? asteroid-translated box-translated bullet)
             (bullet-kill-asteroid asteroid bullet)))))))
 

@@ -1,5 +1,5 @@
 (ns spacegame.input
-  (:require [spacegame.globals :as globals :refer [player bullets]]
+  (:require [spacegame.globals :as globals :refer [scene player]]
             [spacegame.player :as player]
             [spacegame.bullet :as bullet]))
 
@@ -22,7 +22,10 @@
   (when (contains? keys-down KEY_UP)
     (set! player (player/thrust player)))
 
-  (and (contains? keys-down KEY_L_CTRL)
-       (> 5 (count bullets))
-       (set! bullets (conj bullets (bullet/make-bullet player)))))
-
+  (when(contains? keys-down KEY_L_CTRL)
+    (set! scene
+          (update-in scene [:bullets]
+                     (fn [old-bullets]
+                       (if (> 5 (count old-bullets))
+                         (conj old-bullets (bullet/make-bullet player))
+                         old-bullets))))))

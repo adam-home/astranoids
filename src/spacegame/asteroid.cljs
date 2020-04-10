@@ -92,10 +92,6 @@
                  :else y)]
     (assoc asteroid :x xx :y yy)))
 
-;; (defn move-asteroids
-;;   [asteroids]
-;;   (into #{} (map move-asteroid asteroids)))
-
 (defn explode
   [asteroid]
   (dotimes [_ 20]

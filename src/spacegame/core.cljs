@@ -42,7 +42,9 @@
 (defn move-objects
   [objects]
   (set! globals/scene
-                (assoc globals/scene :asteroids (map globals/move-object (:asteroids globals/scene)))))
+        (assoc globals/scene
+               :asteroids (map globals/move-object (:asteroids globals/scene))
+               :bullets (map globals/move-object (:bullets globals/scene)))))
 ;;  (into #{} (map globals/move-object objects)))
 
 (defn main-loop
@@ -82,11 +84,8 @@
   (draw/draw-scene)
   
   (draw/draw-objects particles)
-  (draw/draw-objects bullets)
+  ;; (draw/draw-objects bullets)
 
-  ;; (draw/draw-objects asteroids)
-  ;; (draw/draw-objects stars)
-  
   (draw/flip)
 
   (when (> globals/level 0)
@@ -109,7 +108,7 @@
   ;; (set! player (first (star/apply-gravity-to-all star (list player))))
 
   (set! particles (part/move-particles particles))
-  (set! bullets (bullet/move-bullets bullets))
+  ;; (set! bullets (bullet/move-bullets bullets))
 
   (set! globals/scene (move-objects globals/scene))
   

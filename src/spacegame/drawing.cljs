@@ -166,4 +166,6 @@
     (globals/draw-object asteroid))
   (doseq [star (:stars globals/scene)]
     (globals/draw-object star))
+  (doseq [bullet (:bullets globals/scene)]
+    (globals/draw-object bullet))
   (.restore buffer-ctx))

@@ -1,6 +1,6 @@
 (ns spacegame.bullet
   (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals :refer [draw-object]]
+            [spacegame.globals :as globals :refer [draw-object move-object]]
             [spacegame.drawing :as draw]
             [spacegame.geometry :as geom]))
 
@@ -16,6 +16,7 @@
                                         (:angle player))]
     {
      :object-type :bullet
+     :id id
      :x x
      :y y
      :dx dx
@@ -24,7 +25,7 @@
      :age 0
      }))
 
-(defn move-bullet
+(defmethod move-object :bullet
   [bullet]
   (let [x (+ (:x bullet) (:dx bullet))
         y (- (:y bullet) (:dy bullet))
@@ -36,16 +37,19 @@
         yy (cond (< y 0) h
                  (> y h) 0
                  :else y)]
-  (assoc bullet :x xx :y yy :age age)))
+    (assoc bullet :x xx :y yy :age age)))
 
-(defn move-bullets
-  [bullets]
-  (let [active (filter #(< (:age %) (:lifetime %)) bullets)]
-    (into #{} (map move-bullet active))))
+;; (defn move-bullets
+;;   [bullets]
+;;   (let [active (filter #(< (:age %) (:lifetime %)) bullets)]
+;;     (into #{} (map move-bullet active))))
 
 (defn remove-bullet
   [bullet]
-  (set! globals/bullets (disj globals/bullets bullet)))
+  (let [bullets (:bullets globals/scene)]
+    (set! globals/scene
+          (assoc globals/scene
+                 :bullets (remove #(= (:id bullet) (:id %)) bullets)))))
 
 (defmethod draw-object :bullet
   [bullet]
