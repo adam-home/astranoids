@@ -63,13 +63,16 @@
       (when (not= 0 globals/games-played)
         (draw/draw-string-centre "GAME OVER"))
         
-      (draw/draw-string-centre "PRESS 1 TO PLAY" :y-offset -40))
+      (draw/draw-string-centre "PRESS 1 TO PLAY" :y-offset -40)
+      (draw/draw-string-centre (:name scene) :y-offset 40))
     (do
       (collision/check-for-collisions)
 
       (when (> globals/new-level-timer 0)
         (set! globals/new-level-timer (dec globals/new-level-timer))
-        (draw/draw-string-centre (str "LEVEL " globals/level) :y-offset -20))
+        (draw/draw-string-centre (str "LEVEL " globals/level) :y-offset -20)
+        (when (:name scene)
+          (draw/draw-string-centre (:name scene) :y-offset 20)))
   
       ;; Show message if all lives lost
       ;; If still alive, process keypresses
