@@ -80,7 +80,13 @@
         (do
           (set! globals/games-played (inc globals/games-played))
           (set! globals/level 0))
-        (input/process-keys))))
+        (do
+          (input/process-keys)
+
+          (when (contains? input/keys-down input/KEY_PLUS)
+            (set! input/keys-down (disj input/keys-down input/KEY_PLUS))
+            (set! globals/level (inc globals/level))
+            (levels/level-init))))))  
   
   (when (> (:lives player) 0)
     (draw/draw-objects (list player)))

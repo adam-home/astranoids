@@ -1,8 +1,7 @@
 (ns spacegame.input
   (:require [spacegame.globals :as globals :refer [scene player]]
             [spacegame.player :as player]
-            [spacegame.bullet :as bullet]
-            [spacegame.levels :as level]))
+            [spacegame.bullet :as bullet]))
 
 (def KEY_LEFT 37)
 (def KEY_RIGHT 39)
@@ -15,11 +14,6 @@
 
 (defn process-keys
   []
-  (when (contains? keys-down KEY_PLUS)
-    (set! keys-down (disj keys-down KEY_PLUS))
-    (set! globals/level (inc globals/level))
-    (level/level-init))
-  
   (when (contains? keys-down KEY_LEFT)
     (set! player (player/rotate-left player)))
 
