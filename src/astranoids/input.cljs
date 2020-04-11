@@ -1,7 +1,7 @@
-(ns spacegame.input
-  (:require [spacegame.globals :as globals :refer [scene player]]
-            [spacegame.player :as player]
-            [spacegame.bullet :as bullet]))
+(ns astranoids.input
+  (:require [astranoids.globals :as globals :refer [scene player]]
+            [astranoids.player :as player]
+            [astranoids.bullet :as bullet]))
 
 (def KEY_LEFT 37)
 (def KEY_RIGHT 39)

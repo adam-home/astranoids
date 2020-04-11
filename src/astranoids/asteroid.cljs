@@ -1,9 +1,9 @@
-(ns spacegame.asteroid
-  (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals :refer [draw-object move-object]]
-            [spacegame.drawing :as draw]
-            [spacegame.geometry :as geom]
-            [spacegame.particle :as part]))
+(ns astranoids.asteroid
+  (:require [astranoids.config :as cfg]
+            [astranoids.globals :as globals :refer [draw-object move-object]]
+            [astranoids.drawing :as draw]
+            [astranoids.geometry :as geom]
+            [astranoids.particle :as part]))
 
 ;; [[-5 -10] [0 -5] [5 -7] [10 0] [7 2] [10 7] [0 10] [-10 5] [-7 0] [-10 -5]])
 (def asteroid-shape-0

@@ -1,6 +1,6 @@
-(ns spacegame.particle
-  (:require [spacegame.globals :as globals :refer [draw-object move-object]]
-            [spacegame.config :as cfg]))
+(ns astranoids.particle
+  (:require [astranoids.globals :as globals :refer [draw-object move-object]]
+            [astranoids.config :as cfg]))
 
 (def DEFAULT-PARTICLE-COLOURS ["red" "orange" "yellow"])
 

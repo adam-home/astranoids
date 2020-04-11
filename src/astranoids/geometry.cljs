@@ -1,5 +1,5 @@
-(ns spacegame.geometry
-  (:require [spacegame.config :as cfg]))
+(ns astranoids.geometry
+  (:require [astranoids.config :as cfg]))
 
 (defn- translate-pair
   [pair dx dy]

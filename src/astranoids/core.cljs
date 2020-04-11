@@ -1,17 +1,17 @@
-(ns spacegame.core
+(ns astranoids.core
   (:require [clojure.set :as set]
-            [spacegame.globals :as globals :refer [scene player]]
-            [spacegame.config :as cfg]
-            [spacegame.input :as input]
-            [spacegame.drawing :as draw]
-            [spacegame.player :as player]
-            [spacegame.particle :as part]
-            [spacegame.bullet :as bullet]
-            [spacegame.asteroid :as asteroid]
-            [spacegame.star :as star]
-            [spacegame.geometry :as geom]
-            [spacegame.collision :as collision]
-            [spacegame.levels :as levels]))
+            [astranoids.globals :as globals :refer [scene player]]
+            [astranoids.config :as cfg]
+            [astranoids.input :as input]
+            [astranoids.drawing :as draw]
+            [astranoids.player :as player]
+            [astranoids.particle :as part]
+            [astranoids.bullet :as bullet]
+            [astranoids.asteroid :as asteroid]
+            [astranoids.star :as star]
+            [astranoids.geometry :as geom]
+            [astranoids.collision :as collision]
+            [astranoids.levels :as levels]))
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
@@ -21,7 +21,7 @@
 
 (enable-console-print!)
 
-(println "This text is printed from src/spacegame/core.cljs. Go ahead and edit it and see reloading in action.")
+(println "This text is printed from src/astranoids/core.cljs. Go ahead and edit it and see reloading in action.")
 
 ;; define your app data so that it doesn't get over-written on reload
 

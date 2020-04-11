@@ -1,9 +1,9 @@
-(ns spacegame.levels
-  (:require [spacegame.globals :as globals :refer [level scene]]
-            [spacegame.input :as input]
-            [spacegame.asteroid :as asteroid]
-            [spacegame.star :as star]
-            [spacegame.player :as player]))
+(ns astranoids.levels
+  (:require [astranoids.globals :as globals :refer [level scene]]
+            [astranoids.input :as input]
+            [astranoids.asteroid :as asteroid]
+            [astranoids.star :as star]
+            [astranoids.player :as player]))
 
 ;; Level 0 is attract mode
 (def levels

@@ -1,4 +1,4 @@
-(ns spacegame.config)
+(ns astranoids.config)
 
 ;; Discrete step angles
 (def steps 64)

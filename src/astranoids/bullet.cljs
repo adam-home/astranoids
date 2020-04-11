@@ -1,8 +1,8 @@
-(ns spacegame.bullet
-  (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals :refer [draw-object move-object]]
-            [spacegame.drawing :as draw]
-            [spacegame.geometry :as geom]))
+(ns astranoids.bullet
+  (:require [astranoids.config :as cfg]
+            [astranoids.globals :as globals :refer [draw-object move-object]]
+            [astranoids.drawing :as draw]
+            [astranoids.geometry :as geom]))
 
 (defn make-bullet [player]
   (let [

@@ -1,10 +1,10 @@
-(ns spacegame.collision
-  (:require [spacegame.globals :as globals :refer [player]]
-            [spacegame.config :as cfg]
-            [spacegame.geometry :as geom]
-            [spacegame.player :as player]
-            [spacegame.asteroid :as asteroid]
-            [spacegame.bullet :as bullet]))
+(ns astranoids.collision
+  (:require [astranoids.globals :as globals :refer [player]]
+            [astranoids.config :as cfg]
+            [astranoids.geometry :as geom]
+            [astranoids.player :as player]
+            [astranoids.asteroid :as asteroid]
+            [astranoids.bullet :as bullet]))
 
 
 ;; returns true iff the line from (a,b)->(c,d) intersects with (p,q)->(r,s)

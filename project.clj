@@ -1,4 +1,4 @@
-(defproject spacegame "0.1.0-SNAPSHOT"
+(defproject astranoids "0.1.0-SNAPSHOT"
   :description "FIXME: write this!"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -22,16 +22,16 @@
                 ;; The presence of a :figwheel configuration here
                 ;; will cause figwheel to inject the figwheel client
                 ;; into your build
-                :figwheel {:on-jsload "spacegame.core/on-js-reload"
+                :figwheel {:on-jsload "astranoids.core/on-js-reload"
                            ;; :open-urls will pop open your application
                            ;; in the default browser once Figwheel has
                            ;; started and compiled your application.
                            ;; Comment this out once it no longer serves you.
                            :open-urls ["http://localhost:3449/index.html"]}
 
-                :compiler {:main spacegame.core
+                :compiler {:main astranoids.core
                            :asset-path "js/compiled/out"
-                           :output-to "resources/public/js/compiled/spacegame.js"
+                           :output-to "resources/public/js/compiled/astranoids.js"
                            :output-dir "resources/public/js/compiled/out"
                            :source-map-timestamp true
                            ;; To console.log CLJS data-structures make sure you enable devtools in Chrome
@@ -42,8 +42,8 @@
                ;; lein cljsbuild once min
                {:id "min"
                 :source-paths ["src"]
-                :compiler {:output-to "resources/public/js/compiled/spacegame.js"
-                           :main spacegame.core
+                :compiler {:output-to "resources/public/js/compiled/astranoids.js"
+                           :main astranoids.core
                            :optimizations :advanced
                            :pretty-print false}}]}
 

@@ -1,9 +1,9 @@
-(ns spacegame.player
-  (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals :refer [draw-object]]
-            [spacegame.drawing :as draw]
-            [spacegame.geometry :as geom]
-            [spacegame.particle :as part]))
+(ns astranoids.player
+  (:require [astranoids.config :as cfg]
+            [astranoids.globals :as globals :refer [draw-object]]
+            [astranoids.drawing :as draw]
+            [astranoids.geometry :as geom]
+            [astranoids.particle :as part]))
 
 ;; (def arrow-shape
 ;;   [[-30 40] [0 -40] [30 40] [0 20]])

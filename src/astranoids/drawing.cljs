@@ -1,7 +1,7 @@
-(ns spacegame.drawing
-  (:require [spacegame.config :as cfg]
-            [spacegame.globals :as globals :refer [buffer-ctx screen-ctx]]
-            [spacegame.geometry :as geom]))
+(ns astranoids.drawing
+  (:require [astranoids.config :as cfg]
+            [astranoids.globals :as globals :refer [buffer-ctx screen-ctx]]
+            [astranoids.geometry :as geom]))
 
 (def alphas {
              \0 [ [[0 0] [8 0]] [[8 0] [8 16]] [[8 16] [0 16]] [[0 16] [0 0]] ]

@@ -1,4 +1,4 @@
-(ns spacegame.globals)
+(ns astranoids.globals)
 
 (def circle (* Math.PI 2))
 
