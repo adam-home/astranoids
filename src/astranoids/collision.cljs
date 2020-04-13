@@ -106,11 +106,8 @@
   
   (if (> 3 (:generation asteroid))
     (dotimes [_ 2]
-      (set! globals/scene
-            (update-in globals/scene [:asteroids]
-                       (fn [old]
-                         (conj old (asteroid/make-asteroid (:x asteroid) (:y asteroid)
-                                                           (inc (:generation asteroid))))))))))
+      (globals/add-object :asteroids (asteroid/make-asteroid (:x asteroid) (:y asteroid)
+                                                             (inc (:generation asteroid)))))))
 
 (defn check-for-collisions
   []
