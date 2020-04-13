@@ -18,11 +18,6 @@
                   (Math/round (rand (dec (count colour-vec)))))
      }))
 
-(defn add-particle-to-scene
-  [particle]
-  (set! globals/scene
-        (update-in globals/scene [:particles] (fn [old] (conj old particle)))))
-
 (defmethod draw-object :particle
   [particle]
 

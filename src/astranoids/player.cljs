@@ -74,7 +74,7 @@
     (dotimes [_ 2]
       (let [variance (- (rand 0.5) 0.25)
             [pdx pdy] (geom/vector-to-dx-dy (- angle Math.PI variance) 2)]
-        (part/add-particle-to-scene (part/make-particle px py pdx pdy))))
+        (globals/add-object :particles (part/make-particle px py pdx pdy))))
                                   
     (assoc player :dx dx :dy dy)))
 
@@ -113,10 +113,9 @@
   [player]
   (dotimes [_ 40]
     (let [[dx dy] (geom/vector-to-dx-dy (rand globals/circle) (rand 4))]
-      (part/add-particle-to-scene (part/make-particle (:x player) (:y player)
+      (globals/add-object :particles(part/make-particle (:x player) (:y player)
                                                       dx dy
                                                       :colours ["white" "yellow"])))))
-
 (defn add-score
   [player score]
   (assoc player :score (+ score (:score player))))

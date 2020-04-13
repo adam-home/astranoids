@@ -9,6 +9,7 @@
             [astranoids.bullet :as bullet]
             [astranoids.asteroid :as asteroid]
             [astranoids.star :as star]
+            [astranoids.saucer :as saucer]
             [astranoids.geometry :as geom]
             [astranoids.collision :as collision]
             [astranoids.levels :as levels]))
@@ -17,7 +18,7 @@
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
-  )
+  (println "Reloaded"))
 
 (enable-console-print!)
 
@@ -39,7 +40,7 @@
 
 (defn move-objects-of-type
   [type]
-  (filter (comp not nil?)  (map globals/move-object (type scene))))
+  (filter (comp not nil?) (map globals/move-object (type scene))))
 
 (defn move-objects
   [objects]
@@ -47,7 +48,18 @@
         (assoc scene
                :asteroids (move-objects-of-type :asteroids)
                :bullets (move-objects-of-type :bullets)
+               :saucers (move-objects-of-type :saucers)
                :particles (move-objects-of-type :particles))))
+
+(defn update-objects-of-type
+  [type]
+  (filter (comp not nil?) (map globals/update-object (type scene))))
+
+(defn update-objects
+  [objects]
+  (set! scene
+        (assoc scene
+               :saucers (update-objects-of-type :saucers))))
 
 (defn main-loop
   []
@@ -104,11 +116,13 @@
     (set! player (first (star/apply-gravity-to-all star (list player))))
 
     (let [asteroids (:asteroids scene)
+          saucers (:saucers scene)
           bullets (:bullets scene)
           particles (:particles scene)]
       (set! scene
             (assoc scene
                    :asteroids (star/apply-gravity-to-all star asteroids)
+                   :saucers (star/apply-gravity-to-all star saucers)
                    :bullets (star/apply-gravity-to-all star bullets)
                    :particles (star/apply-gravity-to-all star particles)))))
 
@@ -120,6 +134,11 @@
     (levels/level-init)
     (set! globals/new-level-timer cfg/level-message-timeout))
 
+  (set! scene (update-objects scene))
+  
+  ;; Level-specific updates
+  (levels/level-update)  
+  
   (.requestAnimationFrame js/window
                           (fn []
                             (main-loop)

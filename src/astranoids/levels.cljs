@@ -3,6 +3,7 @@
             [astranoids.input :as input]
             [astranoids.asteroid :as asteroid]
             [astranoids.star :as star]
+            [astranoids.saucer :as saucer]
             [astranoids.player :as player]))
 
 ;; Level 0 is attract mode
@@ -24,6 +25,20 @@
                          :asteroids (asteroid/make-asteroids 4)})
             (set! globals/player (player/reset-player globals/player)))
     :complete (fn [] (= 0 (count (:asteroids globals/scene))))}
+
+   {:init (fn []
+            (set! scene {:name "SHOOTING BACK"
+                         :asteroids (asteroid/make-asteroids 2)
+                         :saucers (list (saucer/make-saucer 100 100))})
+            (set! globals/player (player/make-player)))
+    :complete (fn [] (and (= 0 (count (:asteroids globals/scene)))
+                          (= 0 (count (:saucers globals/scene)))))
+    :update (fn []
+              ;; Create a new saucer every so often, as long as the player is alive
+              (when (and (> (:lives globals/player) 0)
+                         (> (rand 1000) 999))
+                (globals/add-object :saucers (saucer/make-saucer (rand 1000) (rand 400)))))
+    }
 
    {:init (fn []
             (set! scene {:name "WISH UPON A STAR"
@@ -49,3 +64,8 @@
 (defn level-complete
   []
   ((:complete (get levels (Math/min level (dec (count levels)))))))
+
+(defn level-update
+  []
+  (let [f (:update (get levels level))]
+    (if f (f))))

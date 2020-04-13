@@ -21,3 +21,14 @@
 
 (defmulti draw-object :object-type)
 (defmulti move-object :object-type)
+(defmulti update-object :object-type)
+
+(defn add-object
+  [type object]
+  (set! scene (update-in scene [type] (fn [old] (conj old object)))))
+
+(defn remove-object
+  [type object]
+  (let [objects (type scene)]
+    (set! scene (assoc scene
+                       type (remove #(= (:id object) (:id %)) objects)))))

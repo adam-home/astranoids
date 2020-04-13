@@ -76,6 +76,19 @@
               (.-canvas buffer-ctx)
               0 0))
 
+(defn draw-box
+  [box]
+  (let [[[x1 y1] [x2 y2]] box]
+    (.save buffer-ctx)
+    (.moveTo buffer-ctx x1 y1)
+    (.lineTo buffer-ctx x2 y1)
+    (.lineTo buffer-ctx x2 y2)
+    (.lineTo buffer-ctx x1 y2)
+    (.closePath buffer-ctx)
+    (set! (.-strokeStyle buffer-ctx) "blue")
+    (.stroke buffer-ctx)
+    (.restore buffer-ctx)))
+
 (defn draw-shape
   [shape & {:keys [colour fill x y angle scale width]}] 
   (.save buffer-ctx)
@@ -181,6 +194,8 @@
   (.save buffer-ctx)
   (doseq [asteroid (:asteroids globals/scene)]
     (globals/draw-object asteroid))
+  (doseq [saucer (:saucers globals/scene)]
+    (globals/draw-object saucer))
   (doseq [star (:stars globals/scene)]
     (globals/draw-object star))
   (doseq [bullet (:bullets globals/scene)]

@@ -4,6 +4,7 @@
             [astranoids.geometry :as geom]
             [astranoids.player :as player]
             [astranoids.asteroid :as asteroid]
+            [astranoids.saucer :as saucer]
             [astranoids.bullet :as bullet]))
 
 
@@ -49,17 +50,33 @@
   (for [line1 poly1 line2 poly2]
     (vector line1 line2)))
 
+(defn boxes-intersect?
+  [box1 box2]
+  (let [[[b1x1 b1y1] [b1x2 b1y2]] box1
+        [[b2x1 b2y1] [b2x2 b2y2]] box2]
+    (or (geom/point-in-box? [b1x1 b1y1] box2)
+        (geom/point-in-box? [b1x2 b1y2] box2)
+        (geom/point-in-box? [b1x1 b1y2] box2)
+        (geom/point-in-box? [b1x2 b1y1] box2)
+        (geom/point-in-box? [b2x1 b2y1] box1)
+        (geom/point-in-box? [b2x2 b2y2] box1)
+        (geom/point-in-box? [b2x1 b2y2] box1)
+        (geom/point-in-box? [b2x2 b2y1] box1))))
+
 (defn polygons-intersect?
-  [poly1 poly2]
-  (let [line-pairs (get-line-pairs poly1 poly2)]
-    (loop [pair line-pairs
-           intersected false]
-      (if (or intersected
-              (empty? pair))
-        intersected
-        (recur (rest pair)
-               (lines-intersect? (first (first pair))
-                                 (second (first pair))))))))
+  ([poly1 poly2 box1 box2]
+   (and (boxes-intersect? box1 box2)
+        (polygons-intersect? poly1 poly2)))
+  ([poly1 poly2]
+   (let [line-pairs (get-line-pairs poly1 poly2)]
+     (loop [pair line-pairs
+            intersected false]
+       (if (or intersected
+               (empty? pair))
+         intersected
+         (recur (rest pair)
+                (lines-intersect? (first (first pair))
+                                  (second (first pair)))))))))
 
 (defn bullet-intersect?
   [shape box bullet]
@@ -84,7 +101,7 @@
   ;; Check to see if any of the asteroids have been hit by a bullet
   (set! player (player/add-score player 1))
   (asteroid/explode asteroid)
-  (asteroid/remove-asteroid asteroid)
+  (globals/remove-object :asteroids asteroid)
   (bullet/remove-bullet bullet)
   
   (if (> 3 (:generation asteroid))
@@ -93,25 +110,67 @@
             (update-in globals/scene [:asteroids]
                        (fn [old]
                          (conj old (asteroid/make-asteroid (:x asteroid) (:y asteroid)
-                                                               (inc (:generation asteroid))))))))))
+                                                           (inc (:generation asteroid))))))))))
 
 (defn check-for-collisions
   []
-  (let [player-translated (geom/translate-shape (:shape player) (:x player) (:y player))
-        asteroids (:asteroids globals/scene)]
-    (doseq [asteroid asteroids]
-      (let [asteroid-translated (geom/translate-shape (:shape asteroid) (:x asteroid) (:y asteroid))
-            box-translated (geom/translate-box (:box asteroid) (:x asteroid) (:y asteroid)) ]
-        
-        ;; Check to see if any of the asteroids have hit the player.
+  (let [[player-translated player-hit-box] (geom/translate-shape-and-box player)]
+
+    ;; Asteroids vs player
+    ;; Asteroids vs saucers
+    ;; Asteroids vs bullets
+    (doseq [asteroid (:asteroids globals/scene)]
+      (let [[asteroid-translated asteroid-hit-box] (geom/translate-shape-and-box asteroid)]
+
+        ;; Check to see if the asteroid has hit the player.
         ;; If player has a shield, they are invulnerable.
         (when (and (<= (:shield player) 0)
-                   (polygons-intersect? asteroid-translated player-translated))
+                   (polygons-intersect? asteroid-translated player-translated asteroid-hit-box player-hit-box))
           (set! player (update player :lives dec))
           (player/explode player)
           (set! player (player/reset-player player)))
 
+        ;; Have any saucers been hit by the asteroid?
+        (doseq [saucer (:saucers globals/scene)]
+          (let [[saucer-translated saucer-hit-box] (geom/translate-shape-and-box saucer)]
+            (when (polygons-intersect? asteroid-translated saucer-translated asteroid-hit-box saucer-hit-box)
+              (saucer/explode saucer)
+              (globals/remove-object :saucers saucer))))
+        
+        ;; Have any bullets hit the asteroid?
         (doseq [bullet (:bullets globals/scene)]
-          (when (bullet-intersect? asteroid-translated box-translated bullet)
-            (bullet-kill-asteroid asteroid bullet)))))))
+          (when (bullet-intersect? asteroid-translated asteroid-hit-box bullet)
+            (bullet-kill-asteroid asteroid bullet)))))
+    
+    ;; Saucers vs Player
+    ;; Player bullets vs saucers
+    ;; Saucer bullets vs player
+    (doseq [saucer (:saucers globals/scene)]
+      (let [[saucer-translated saucer-hit-box] (geom/translate-shape-and-box saucer)]
+
+        ;; Saucers vs player
+        (when (polygons-intersect? saucer-translated player-translated saucer-hit-box player-hit-box)
+          (saucer/explode saucer)
+          (globals/remove-object :saucers saucer)
+          (when (<= (:shield player) 0)
+            (set! player (update player :lives dec))
+            (player/explode player)
+            (set! player (player/reset-player player))))
+
+        ;; Saucers vs player bullets
+        (doseq [bullet (filter #(= :player (:object-type (:owner %)))
+                               (:bullets globals/scene))]
+          (when (bullet-intersect? saucer-translated saucer-hit-box bullet)
+            (saucer/explode saucer)
+            (globals/remove-object :saucers saucer)
+            (set! player (player/add-score player 10))))
+
+        ;; Player vs saucer bullets
+        (doseq [bullet (filter #(= :saucer (:object-type (:owner %)))
+                               (:bullets globals/scene))]
+          (when (bullet-intersect? player-translated player-hit-box bullet)
+            (set! player (update player :lives dec))
+            (player/explode player)
+            (set! player (player/reset-player player))))
+      ))))
 

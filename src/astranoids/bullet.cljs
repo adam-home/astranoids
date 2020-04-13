@@ -4,25 +4,28 @@
             [astranoids.drawing :as draw]
             [astranoids.geometry :as geom]))
 
-(defn make-bullet [player]
+(defn make-bullet [owner & { :keys [angle lifetime colour] }]
   (let [
+        rot (or angle (:angle owner))
         id (globals/next-id)
-        sa (Math/sin (:angle player))
-        ca (Math/cos (:angle player))
-        dx (+ (:dx player) (* 3 sa))
-        dy (+ (:dy player) (* 3 ca))
-        [x y] (geom/rotate-around-point (:x player) (- (:y player) 10)
-                                        (:x player) (:y player)
-                                        (:angle player))]
+        sa (Math/sin rot)
+        ca (Math/cos rot)
+        dx (+ (:dx owner) (* 3 sa))
+        dy (+ (:dy owner) (* 3 ca))
+        [x y] (geom/rotate-around-point (:x owner) (- (:y owner) 10)
+                                        (:x owner) (:y owner)
+                                        rot)]
     {
      :object-type :bullet
      :id id
+     :owner owner
      :x x
      :y y
      :dx dx
      :dy dy
-     :lifetime 300
+     :lifetime (or lifetime 300)
      :age 0
+     :colour (or colour "white")
      }))
 
 (defmethod move-object :bullet
@@ -58,7 +61,7 @@
         0
         (* 2 Math.PI))
   
-  (set! (.-fillStyle globals/buffer-ctx) "white")
+  (set! (.-fillStyle globals/buffer-ctx) (:colour bullet))
   (set! (.-shadowBlur globals/buffer-ctx) 8)
   (set! (.-shadowColor globals/buffer-ctx) "green")
   (.fill globals/buffer-ctx))

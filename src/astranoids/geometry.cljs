@@ -58,7 +58,7 @@
   "Find bounding box for shape"
   [shape]
   (loop [lines shape
-         bounds [999 999 -999 -999]]
+         bounds [99999 99999 -99999 -99999]]
     (if (empty? lines)
       (vector [(nth bounds 0) (nth bounds 1)]
               [(nth bounds 2) (nth bounds 3)])
@@ -73,3 +73,12 @@
         x (/ (- w text-width) 2)
         y (/ (- h 16) 2)]
         [x y]))
+
+(defn translate-shape-and-box
+  [object]
+  (let [obj-translated (translate-shape (:shape object) (:x object) (:y object))
+        obj-hit-box (translate-box (or (:box object)
+                                       (bounding-box (:shape object)))
+                                   (:x object) (:y object))]
+    [obj-translated obj-hit-box]))
+
