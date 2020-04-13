@@ -158,6 +158,7 @@
         (doseq [bullet (filter #(= :player (:object-type (:owner %)))
                                (:bullets globals/scene))]
           (when (bullet-intersect? saucer-translated saucer-hit-box bullet)
+            (bullet/remove-bullet bullet)
             (saucer/explode saucer)
             (globals/remove-object :saucers saucer)
             (set! player (player/add-score player 10))))
@@ -166,6 +167,7 @@
         (doseq [bullet (filter #(= :saucer (:object-type (:owner %)))
                                (:bullets globals/scene))]
           (when (bullet-intersect? player-translated player-hit-box bullet)
+            (bullet/remove-bullet bullet)
             (set! player (update player :lives dec))
             (player/explode player)
             (set! player (player/reset-player player))))

@@ -65,3 +65,7 @@
   (set! (.-shadowBlur globals/buffer-ctx) 8)
   (set! (.-shadowColor globals/buffer-ctx) "green")
   (.fill globals/buffer-ctx))
+
+(defn get-bullets-owned-by-type
+  [type]
+  (filter #(= type (:object-type (:owner %))) (:bullets globals/scene)))

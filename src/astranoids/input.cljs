@@ -26,5 +26,5 @@
 
   (when (contains? keys-down KEY_L_CTRL)
     (set! keys-down (disj keys-down KEY_L_CTRL))
-    (if (> cfg/max-bullets (count (filter #(= :player (:object-type (:owner %))) (:bullets scene))))
+    (if (> cfg/max-bullets (count (bullet/get-bullets-owned-by-type :player)))
       (globals/add-object :bullets (bullet/make-bullet player)))))
