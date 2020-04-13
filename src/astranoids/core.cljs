@@ -1,3 +1,9 @@
+;;
+;; TODO
+;;
+;; Don't allow asteroids, saucers to start close to the player's position
+;;
+
 (ns astranoids.core
   (:require [clojure.set :as set]
             [astranoids.globals :as globals :refer [scene player]]
@@ -117,14 +123,12 @@
 
     (let [asteroids (:asteroids scene)
           saucers (:saucers scene)
-          bullets (:bullets scene)
-          particles (:particles scene)]
+          bullets (:bullets scene)]
       (set! scene
             (assoc scene
                    :asteroids (star/apply-gravity-to-all star asteroids)
                    :saucers (star/apply-gravity-to-all star saucers)
-                   :bullets (star/apply-gravity-to-all star bullets)
-                   :particles (star/apply-gravity-to-all star particles)))))
+                   :bullets (star/apply-gravity-to-all star bullets)))))
 
   (set! scene (move-objects scene))
   
