@@ -1,5 +1,6 @@
 (ns astranoids.input
   (:require [astranoids.globals :as globals :refer [scene player]]
+            [astranoids.config :as cfg]
             [astranoids.player :as player]
             [astranoids.bullet :as bullet]))
 
@@ -25,9 +26,5 @@
 
   (when (contains? keys-down KEY_L_CTRL)
     (set! keys-down (disj keys-down KEY_L_CTRL))
-    (set! scene
-          (update-in scene [:bullets]
-                     (fn [old-bullets]
-                       (if (> 5 (count old-bullets))
-                         (conj old-bullets (bullet/make-bullet player))
-                         old-bullets))))))
+    (if (> cfg/max-bullets (count (filter #(= :player (:object-type (:owner %))) (:bullets scene))))
+      (globals/add-object :bullets (bullet/make-bullet player)))))
