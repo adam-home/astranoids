@@ -54,6 +54,21 @@
                                       (star/make-star 1000 350))})
             (set! globals/player (player/reset-player globals/player)))
     :complete (fn [] (= 0 (count (:asteroids globals/scene))))}
+
+   {:init (fn []
+            (set! scene {:name "TOTAL CHAOS"
+                         :asteroids (asteroid/make-asteroids 4)
+                         :stars (list (star/make-star 400 250)
+                                      (star/make-star 1000 350))})
+            (set! globals/player (player/reset-player globals/player)))
+    :complete (fn [] (= 0 (count (:asteroids globals/scene))))
+    :update (fn []
+              ;; Create a new saucer every so often, as long as the player is alive
+              (when (and (> (:lives globals/player) 0)
+                         (> (rand 1000) 999))
+                (globals/add-object :saucers (saucer/make-saucer (rand 1000) (rand 400)))))
+    }
+
    ])
 
 (defn level-init
