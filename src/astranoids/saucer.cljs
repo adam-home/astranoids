@@ -12,7 +12,8 @@
    [[-8 -2] [-20 2]] [[-20 2] [-8 6]] [[-8 6] [8 6]] [[8 6] [20 2]] [[20 2] [8 -2]]
    ])
 
-(defn make-saucer [x y]
+(defn make-saucer
+  [x y]
   (let [[dx dy] (geom/vector-to-dx-dy (rand globals/circle) (rand 2))]
     {
      :object-type :saucer
@@ -24,6 +25,13 @@
      :shape saucer-shape
      :box (geom/bounding-box saucer-shape)
      }))
+
+(defn make-saucers
+  [count]
+  (println "Making saucers" count)
+  (for [_ (range count)]
+    (let [[x y] (geom/new-object-location :avoid globals/player)]
+          (make-saucer x y))))
 
 (defmethod draw-object :saucer
   [saucer]

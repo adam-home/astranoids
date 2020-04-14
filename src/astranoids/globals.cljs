@@ -25,10 +25,12 @@
 
 (defn add-object
   [type object]
-  (set! scene (update-in scene [type] (fn [old] (conj old object)))))
+  (doseq [obj (if (seq? object) object (list object))]
+    (set! scene (update-in scene [type] (fn [old] (conj old obj))))))
 
 (defn remove-object
   [type object]
   (let [objects (type scene)]
     (set! scene (assoc scene
                        type (remove #(= (:id object) (:id %)) objects)))))
+

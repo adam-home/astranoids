@@ -36,8 +36,8 @@
     :update (fn []
               ;; Create a new saucer every so often, as long as the player is alive
               (when (and (> (:lives globals/player) 0)
-                         (> (rand 1000) 999))
-                (globals/add-object :saucers (saucer/make-saucer (rand 1000) (rand 400)))))
+                         (> (rand 1000) 998))
+                (globals/add-object :saucers (saucer/make-saucers 1))))
     }
 
    {:init (fn []
@@ -65,8 +65,8 @@
     :update (fn []
               ;; Create a new saucer every so often, as long as the player is alive
               (when (and (> (:lives globals/player) 0)
-                         (> (rand 1000) 999))
-                (globals/add-object :saucers (saucer/make-saucer (rand 1000) (rand 400)))))
+                         (> (rand 1000) 998))
+                (globals/add-object :saucers (saucer/make-saucers 1))))
     }
 
    ])

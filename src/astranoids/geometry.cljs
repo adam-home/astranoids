@@ -82,3 +82,22 @@
                                    (:x object) (:y object))]
     [obj-translated obj-hit-box]))
 
+(defn distance-between-points
+  [pt1 pt2]
+  (let [[x1 y1] pt1
+        [x2 y2] pt2
+        dx (- x2 x1)
+        dy (- y2 y1)]
+    (Math/sqrt (+ (* dx dx) (* dy dy)))))
+  
+(defn new-object-location
+  "Generate random x/y coordinates. If an object is given as the :avoid
+  argument, don't get too close to it. If the object is not specified,
+  use the screen centre instead."
+  [ & { :keys [avoid] } ]
+  (let [[w h] cfg/default-canvas-size
+        obj (if avoid avoid {:x (/ w 2) :y (/ h 2)})]
+    (loop [x (rand w) y (rand h)]
+      (if (< 200 (distance-between-points [(:x obj) (:y obj)] [x y]))
+        [x y]
+        (recur (rand w) (rand h))))))
