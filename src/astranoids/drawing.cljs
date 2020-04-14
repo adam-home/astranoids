@@ -1,7 +1,8 @@
 (ns astranoids.drawing
   (:require [astranoids.config :as cfg]
             [astranoids.globals :as globals :refer [buffer-ctx screen-ctx]]
-            [astranoids.geometry :as geom]))
+            [astranoids.geometry :as geom]
+            [clojure.string :as str]))
 
 (def alphas {
              \0 [ [[0 0] [8 0]] [[8 0] [8 16]] [[8 16] [0 16]] [[0 16] [0 0]] ]
@@ -148,7 +149,7 @@
 
 (defn draw-score
   [score]
-  (let [str-score (clojure.string/reverse (str score))
+  (let [str-score (str/reverse (str score))
         digits (count str-score)
         [w h] cfg/default-canvas-size]
     (loop [chars (seq str-score)
@@ -174,7 +175,7 @@
 
 (defn draw-string-multiline-offset
   [text y-offset]
-  (loop [lines (clojure.string/split-lines text)
+  (loop [lines (str/split-lines text)
          yo y-offset]
       
       (when-not (empty? lines)
