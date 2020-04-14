@@ -23,6 +23,10 @@
 (defmulti move-object :object-type)
 (defmulti update-object :object-type)
 
+(defn count-objects
+  [type]
+  (count (type scene)))
+
 (defn add-object
   [type object]
   (doseq [obj (if (seq? object) object (list object))]

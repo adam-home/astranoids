@@ -1,5 +1,6 @@
 (ns astranoids.levels
   (:require [astranoids.globals :as globals :refer [level scene]]
+            [astranoids.config :as cfg]
             [astranoids.input :as input]
             [astranoids.asteroid :as asteroid]
             [astranoids.star :as star]
@@ -36,7 +37,8 @@
     :update (fn []
               ;; Create a new saucer every so often, as long as the player is alive
               (when (and (> (:lives globals/player) 0)
-                         (> (rand 1000) 998))
+                         (< (globals/count-objects :saucers) cfg/max-saucers)
+                         (< 998 (rand 1000)))
                 (globals/add-object :saucers (saucer/make-saucers 1))))
     }
 
@@ -61,11 +63,13 @@
                          :stars (list (star/make-star 400 250)
                                       (star/make-star 1000 350))})
             (set! globals/player (player/reset-player globals/player)))
-    :complete (fn [] (= 0 (count (:asteroids globals/scene))))
+    :complete (fn [] (and (= 0 (count (:asteroids globals/scene)))
+                          (= 0 (count (:saucers globals/scene)))))
     :update (fn []
               ;; Create a new saucer every so often, as long as the player is alive
               (when (and (> (:lives globals/player) 0)
-                         (> (rand 1000) 998))
+                         (< (globals/count-objects :saucers) cfg/max-saucers)
+                         (< 998 (rand 1000)))
                 (globals/add-object :saucers (saucer/make-saucers 1))))
     }
 
@@ -82,5 +86,6 @@
 
 (defn level-update
   []
-  (let [f (:update (get levels level))]
+  (let [f (:update (get levels
+                        (Math/min level (dec (count levels)))))]
     (if f (f))))

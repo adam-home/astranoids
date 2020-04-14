@@ -7,6 +7,7 @@
 (def max-speed 4)
 
 (def max-bullets 8)
+(def max-saucers 5)
 
 (def level-message-timeout 250)
 

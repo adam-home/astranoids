@@ -28,7 +28,6 @@
 
 (defn make-saucers
   [count]
-  (println "Making saucers" count)
   (for [_ (range count)]
     (let [[x y] (geom/new-object-location :avoid globals/player)]
           (make-saucer x y))))
