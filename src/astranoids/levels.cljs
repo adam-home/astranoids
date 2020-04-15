@@ -11,7 +11,7 @@
 (def levels
   [
    {:init (fn []
-            (set! scene {:name "A S T R A N O I D S\n\nBY ADAM AND PETER T\n\nKEYS LEFT RIGHT UP CTRL"
+            (set! scene {:name "A S T R A N O I D S\n\nBY ADAM AND PETER T\n\nKEYS LEFT RIGHT UP AND CTRL OR SHIFT"
                          :asteroids (asteroid/make-asteroids 6)}))
     :complete (fn [] (contains? input/keys-down input/KEY_1))}
 

@@ -8,6 +8,7 @@
 (def KEY_RIGHT 39)
 (def KEY_UP 38)
 (def KEY_L_CTRL 17)
+(def KEY_L_SHIFT 16)
 (def KEY_1 49)
 (def KEY_PLUS 61)
 
@@ -24,7 +25,9 @@
   (when (contains? keys-down KEY_UP)
     (set! player (player/thrust player)))
 
-  (when (contains? keys-down KEY_L_CTRL)
+  (when (or (contains? keys-down KEY_L_CTRL)
+            (contains? keys-down KEY_L_SHIFT))
     (set! keys-down (disj keys-down KEY_L_CTRL))
+    (set! keys-down (disj keys-down KEY_L_SHIFT))
     (if (> cfg/max-bullets (count (bullet/get-bullets-owned-by-type :player)))
       (globals/add-object :bullets (bullet/make-bullet player)))))
