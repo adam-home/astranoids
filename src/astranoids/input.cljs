@@ -2,7 +2,8 @@
   (:require [astranoids.globals :as globals :refer [scene player]]
             [astranoids.config :as cfg]
             [astranoids.player :as player]
-            [astranoids.bullet :as bullet]))
+            [astranoids.bullet :as bullet]
+            [astranoids.sound :as sound]))
 
 (def KEY_LEFT 37)
 (def KEY_RIGHT 39)
@@ -29,5 +30,6 @@
             (contains? keys-down KEY_L_SHIFT))
     (set! keys-down (disj keys-down KEY_L_CTRL))
     (set! keys-down (disj keys-down KEY_L_SHIFT))
-    (if (> cfg/max-bullets (count (bullet/get-bullets-owned-by-type :player)))
-      (globals/add-object :bullets (bullet/make-bullet player)))))
+    (when (> cfg/max-bullets (count (bullet/get-bullets-owned-by-type :player)))
+      (globals/add-object :bullets (bullet/make-bullet player))
+      (sound/play :laser))))

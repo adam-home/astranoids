@@ -2,6 +2,7 @@
   (:require [astranoids.config :as cfg]
             [astranoids.globals :as globals :refer [draw-object move-object]]
             [astranoids.drawing :as draw]
+            [astranoids.sound :as sound]
             [astranoids.geometry :as geom]
             [astranoids.particle :as part]))
 
@@ -92,6 +93,7 @@
 
 (defn explode
   [asteroid]
+  (sound/play :explosion)
   (dotimes [_ 20]
     (let [[dx dy] (geom/vector-to-dx-dy (rand globals/circle) (rand 4))]
       (globals/add-object :particles (part/make-particle (:x asteroid) (:y asteroid)

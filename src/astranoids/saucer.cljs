@@ -2,6 +2,7 @@
   (:require [astranoids.config :as cfg]
             [astranoids.globals :as globals :refer [draw-object move-object update-object]]
             [astranoids.drawing :as draw]
+            [astranoids.sound :as sound]
             [astranoids.geometry :as geom]
             [astranoids.particle :as part]
             [astranoids.bullet :as bullet]))
@@ -52,7 +53,9 @@
                    :else y)
         ;; Change direction randomly
         [newdx newdy] (if (> (rand 100) 99)
-                        (geom/vector-to-dx-dy (rand globals/circle) (rand 2))
+                        (do
+                          (sound/play :saucer)
+                          (geom/vector-to-dx-dy (rand globals/circle) (rand 2)))
                         [(:dx saucer) (:dy saucer)])
         ]
     (assoc saucer :x newx :y newy :dx newdx :dy newdy)))
@@ -60,14 +63,17 @@
 (defmethod update-object :saucer
   [saucer]
   (if (> (rand 100) 99)
-    (globals/add-object :bullets (bullet/make-bullet saucer
-                                                     :angle (rand globals/circle)
-                                                     :lifetime 300
-                                                     :colour "yellow")))
+    (do
+      (sound/play :laser)
+      (globals/add-object :bullets (bullet/make-bullet saucer
+                                                       :angle (rand globals/circle)
+                                                       :lifetime 300
+                                                       :colour "yellow"))))
   saucer)
 
 (defn explode
   [saucer]
+  (sound/play :explosion)
    (dotimes [_ 20]
      (let [[dx dy] (geom/vector-to-dx-dy (rand globals/circle) (rand 4))]
        (globals/add-object :particles (part/make-particle (:x saucer) (:y saucer)

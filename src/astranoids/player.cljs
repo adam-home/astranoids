@@ -1,6 +1,7 @@
 (ns astranoids.player
   (:require [astranoids.config :as cfg]
             [astranoids.globals :as globals :refer [draw-object]]
+            [astranoids.sound :as sound]
             [astranoids.drawing :as draw]
             [astranoids.geometry :as geom]
             [astranoids.particle :as part]))
@@ -111,6 +112,7 @@
 ;; Create a load of particles at the player's location, expanding away
 (defn explode
   [player]
+  (sound/play :explosion-big)
   (dotimes [_ 40]
     (let [[dx dy] (geom/vector-to-dx-dy (rand globals/circle) (rand 4))]
       (globals/add-object :particles(part/make-particle (:x player) (:y player)
