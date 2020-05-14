@@ -1,6 +1,7 @@
 (ns astranoids.levels
   (:require [astranoids.globals :as globals :refer [level scene]]
             [astranoids.config :as cfg]
+            [astranoids.geometry :as geom]
             [astranoids.input :as input]
             [astranoids.asteroid :as asteroid]
             [astranoids.star :as star]
@@ -73,19 +74,37 @@
                 (globals/add-object :saucers (saucer/make-saucers 1))))
     }
 
+   {:init (fn []
+            (set! globals/player (player/reset-player globals/player))
+            (let [stars (for [_ (range 3)]
+                          (let [[x y] (geom/new-object-location :avoid globals/player)]
+                            (star/make-star x y)))]
+              (set! scene {:name "RANDOM CHAOS"
+                           :asteroids (asteroid/make-asteroids 4)
+                           :stars stars})))
+    :complete (fn [] (and (= 0 (count (:asteroids globals/scene)))
+                          (= 0 (count (:saucers globals/scene)))))
+    :update (fn []
+              ;; Create a new saucer every so often, as long as the player is alive
+              (when (and (> (:lives globals/player) 0)
+                         (< (globals/count-objects :saucers) cfg/max-saucers)
+                         (< 998 (rand 1000)))
+                (globals/add-object :saucers (saucer/make-saucers 1))))
+    }
+
    ])
 
-(defn level-init
-  []
-  (set! globals/new-level-timer 100)
-  ((:init (get levels (Math/min level (dec (count levels)))))))
+  (defn level-init
+    []
+    (set! globals/new-level-timer 100)
+    ((:init (get levels (Math/min level (dec (count levels)))))))
 
-(defn level-complete
-  []
-  ((:complete (get levels (Math/min level (dec (count levels)))))))
+  (defn level-complete
+    []
+    ((:complete (get levels (Math/min level (dec (count levels)))))))
 
-(defn level-update
-  []
-  (let [f (:update (get levels
-                        (Math/min level (dec (count levels)))))]
-    (if f (f))))
+  (defn level-update
+    []
+    (let [f (:update (get levels
+                          (Math/min level (dec (count levels)))))]
+      (if f (f))))
