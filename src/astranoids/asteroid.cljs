@@ -64,9 +64,10 @@
      :y y
      :dx dx
      :dy dy
-     :shape shp
+     :shape (geom/rotate-shape shp [0 0] (rand (* 2 Math/PI)))
      :box (geom/bounding-box shp)
      :generation generation
+     :rotation (- 0.01 (rand 0.02))
      }))
 
 (defn make-asteroids
@@ -88,8 +89,9 @@
                  :else x)
         yy (cond (< y 0) h
                  (> y h) 0
-                 :else y)]
-    (assoc asteroid :x xx :y yy)))
+                 :else y)
+        shape    (geom/rotate-shape (:shape asteroid) [0 0] (:rotation asteroid))]
+    (assoc asteroid :x xx :y yy :shape shape)))
 
 (defn explode
   [asteroid]

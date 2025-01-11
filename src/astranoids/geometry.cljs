@@ -31,6 +31,13 @@
     [(+ (- (* ca dx) (* sa dy)) origin-x)
      (+ (+ (* sa dx) (* ca dy)) origin-y)]))
 
+(defn rotate-shape
+  [shape point angle]
+  (let [[cx cy] point]
+    (into [] (for [[[x1 y1] [x2 y2]] shape]
+               [(rotate-around-point x1 y1 cx cy angle)
+                (rotate-around-point x2 y2 cx cy angle)]))))
+
 (defn vector-to-dx-dy
   [angle velocity]
   (let [dx (* velocity (Math/sin angle))
@@ -72,7 +79,7 @@
         text-width (+ (* 8 digits) (* 8 (dec digits)))
         x (/ (- w text-width) 2)
         y (/ (- h 16) 2)]
-        [x y]))
+       [x y]))
 
 (defn translate-shape-and-box
   [object]
@@ -94,7 +101,7 @@
   "Generate random x/y coordinates. If an object is given as the :avoid
   argument, don't get too close to it. If the object is not specified,
   use the screen centre instead."
-  [ & { :keys [avoid] } ]
+  [ & { :keys [avoid]}]
   (let [[w h] cfg/default-canvas-size
         obj (if avoid avoid {:x (/ w 2) :y (/ h 2)})]
     (loop [x (rand w) y (rand h)]
