@@ -1,6 +1,6 @@
-(defproject astranoids "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
-  :url "http://example.com/FIXME"
+(defproject astranoids "0.1.1"
+  :description "Astranoids - a bit like asteroids"
+  :url "http://spikydinosaur.com/astranoids"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
