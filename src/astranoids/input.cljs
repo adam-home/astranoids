@@ -1,5 +1,5 @@
 (ns astranoids.input
-  (:require [astranoids.globals :as globals :refer [scene player]]
+  (:require [astranoids.globals :as globals :refer [player]]
             [astranoids.config :as cfg]
             [astranoids.player :as player]
             [astranoids.bullet :as bullet]

@@ -5,32 +5,16 @@
 ;;
 
 (ns astranoids.core
-  (:require [clojure.set :as set]
-            [astranoids.globals :as globals :refer [scene player]]
+  (:require [astranoids.globals :as globals :refer [scene player]]
             [astranoids.config :as cfg]
             [astranoids.input :as input]
             [astranoids.drawing :as draw]
             [astranoids.player :as player]
-            [astranoids.particle :as part]
-            [astranoids.bullet :as bullet]
-            [astranoids.asteroid :as asteroid]
             [astranoids.star :as star]
-            [astranoids.saucer :as saucer]
-            [astranoids.geometry :as geom]
             [astranoids.collision :as collision]
             [astranoids.levels :as levels]))
 
-(defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-  (println "Reloaded"))
-
 (enable-console-print!)
-
-;; define your app data so that it doesn't get over-written on reload
-
-(defonce app-state (atom {:text "Hello world!"}))
 
 (.addEventListener js/window
                    "keydown"
@@ -48,8 +32,8 @@
   [type]
   (filter (comp not nil?) (map globals/move-object (type scene))))
 
-(defn move-objects
-  [objects]
+(defn move-objects!
+  []
   (set! scene
         (assoc scene
                :asteroids (move-objects-of-type :asteroids)
@@ -61,8 +45,8 @@
   [type]
   (filter (comp not nil?) (map globals/update-object (type scene))))
 
-(defn update-objects
-  [objects]
+(defn update-objects!
+  []
   (set! scene
         (assoc scene
                :saucers (update-objects-of-type :saucers))))
@@ -130,7 +114,7 @@
                    :saucers (star/apply-gravity-to-all star saucers)
                    :bullets (star/apply-gravity-to-all star bullets)))))
 
-  (set! scene (move-objects scene))
+  (move-objects!)
   
   ;; Do we need to start a new level?
   (when (levels/level-complete)
@@ -138,7 +122,7 @@
     (levels/level-init)
     (set! globals/new-level-timer cfg/level-message-timeout))
 
-  (set! scene (update-objects scene))
+  (update-objects!)
   
   ;; Level-specific updates
   (levels/level-update)  

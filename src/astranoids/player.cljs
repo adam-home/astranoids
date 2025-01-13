@@ -58,7 +58,7 @@
 (defn limit-speed
   [delta-v]
   (if (> (Math/abs delta-v) cfg/max-speed)
-    (* (Math.sign delta-v) cfg/max-speed)
+    (* (js/Math.sign delta-v) cfg/max-speed)
     delta-v))
   
 (defn thrust
@@ -74,7 +74,7 @@
 
     (dotimes [_ 2]
       (let [variance (- (rand 0.5) 0.25)
-            [pdx pdy] (geom/vector-to-dx-dy (- angle Math.PI variance) 2)]
+            [pdx pdy] (geom/vector-to-dx-dy (- angle js/Math.PI variance) 2)]
         (globals/add-object :particles (part/make-particle px py pdx pdy))))
                                   
     (assoc player :dx dx :dy dy)))

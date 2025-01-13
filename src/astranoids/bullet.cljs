@@ -1,7 +1,6 @@
 (ns astranoids.bullet
   (:require [astranoids.config :as cfg]
             [astranoids.globals :as globals :refer [draw-object move-object]]
-            [astranoids.drawing :as draw]
             [astranoids.geometry :as geom]))
 
 (defn make-bullet [owner & { :keys [angle lifetime colour] }]
@@ -59,7 +58,7 @@
         (:x bullet) (:y bullet)
         2
         0
-        (* 2 Math.PI))
+        (* 2 js/Math.PI))
   
   (set! (.-fillStyle globals/buffer-ctx) (:colour bullet))
   (set! (.-shadowBlur globals/buffer-ctx) 8)

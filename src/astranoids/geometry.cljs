@@ -69,8 +69,7 @@
     (if (empty? lines)
       (vector [(nth bounds 0) (nth bounds 1)]
               [(nth bounds 2) (nth bounds 3)])
-      (do
-        (recur (rest lines) (get-min-max-line (first lines) bounds))))))
+      (recur (rest lines) (get-min-max-line (first lines) bounds)))))
 
 (defn centre-text
   [text]

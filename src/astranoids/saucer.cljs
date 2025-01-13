@@ -62,13 +62,12 @@
 
 (defmethod update-object :saucer
   [saucer]
-  (if (> (rand 100) 99)
-    (do
-      (sound/play :laser)
-      (globals/add-object :bullets (bullet/make-bullet saucer
-                                                       :angle (rand globals/circle)
-                                                       :lifetime 300
-                                                       :colour "yellow"))))
+  (when (> (rand 100) 99)
+    (sound/play :laser)
+    (globals/add-object :bullets (bullet/make-bullet saucer
+                                                     :angle (rand globals/circle)
+                                                     :lifetime 300
+                                                     :colour "yellow")))
   saucer)
 
 (defn explode

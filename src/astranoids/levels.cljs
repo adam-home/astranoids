@@ -107,4 +107,4 @@
     []
     (let [f (:update (get levels
                           (Math/min level (dec (count levels)))))]
-      (if f (f))))
+      (when f (f))))

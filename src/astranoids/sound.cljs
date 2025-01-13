@@ -9,5 +9,5 @@
 
 (defn play
   [effect]
-  (if-let [sound (effect effects)]
+  (when-let [sound (effect effects)]
     (.play (.cloneNode sound true))))

@@ -1,6 +1,5 @@
 (ns astranoids.star
-  (:require [astranoids.config :as cfg]
-            [astranoids.globals :as globals :refer [draw-object move-object]]
+  (:require [astranoids.globals :as globals :refer [draw-object move-object]]
             [astranoids.drawing :as draw]
             [astranoids.geometry :as geom]))
 

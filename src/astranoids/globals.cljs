@@ -1,6 +1,6 @@
 (ns astranoids.globals)
 
-(def circle (* Math.PI 2))
+(def circle (* js/Math.PI 2))
 
 (def player nil)
 

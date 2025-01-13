@@ -47,8 +47,8 @@
   (-> js/document (.getElementById elem-id)))
 
 (defn create-canvas
-  [target-elem-id width height & {:keys [id]}]
   "Create a new canvas element as a child of target-elem with given width and height"
+  [target-elem-id width height & {:keys [id]}]
   (let [target-elem (get-elem-by-id target-elem-id)
         canvas-elem (.createElement js/document "canvas")
         buffer (.createElement js/document "canvas")]
@@ -76,19 +76,6 @@
   (.drawImage screen-ctx
               (.-canvas buffer-ctx)
               0 0))
-
-(defn draw-box
-  [box]
-  (let [[[x1 y1] [x2 y2]] box]
-    (.save buffer-ctx)
-    (.moveTo buffer-ctx x1 y1)
-    (.lineTo buffer-ctx x2 y1)
-    (.lineTo buffer-ctx x2 y2)
-    (.lineTo buffer-ctx x1 y2)
-    (.closePath buffer-ctx)
-    (set! (.-strokeStyle buffer-ctx) "blue")
-    (.stroke buffer-ctx)
-    (.restore buffer-ctx)))
 
 (defn draw-shape
   [shape & {:keys [colour fill x y angle scale width]}] 
@@ -124,7 +111,7 @@
   [player]
 
   ;; Shield flickers
-  (when (and (> (:shield player 0))
+  (when (and (> (:shield player) 0)
              (= 0 (mod (:shield player) 5)))
     (.save buffer-ctx)
     (.beginPath buffer-ctx)
@@ -151,7 +138,7 @@
   [score]
   (let [str-score (str/reverse (str score))
         digits (count str-score)
-        [w h] cfg/default-canvas-size]
+        [w _] cfg/default-canvas-size]
     (loop [chars (seq str-score)
            i 0]
       (when (< i digits)

@@ -1,6 +1,5 @@
 (ns astranoids.collision
   (:require [astranoids.globals :as globals :refer [player]]
-            [astranoids.config :as cfg]
             [astranoids.geometry :as geom]
             [astranoids.player :as player]
             [astranoids.asteroid :as asteroid]
@@ -104,7 +103,7 @@
   (globals/remove-object :asteroids asteroid)
   (bullet/remove-bullet bullet)
   
-  (if (> 3 (:generation asteroid))
+  (when (> 3 (:generation asteroid))
     (dotimes [_ 2]
       (globals/add-object :asteroids (asteroid/make-asteroid (:x asteroid) (:y asteroid)
                                                              (inc (:generation asteroid)))))))

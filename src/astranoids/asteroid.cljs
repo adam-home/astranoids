@@ -74,8 +74,6 @@
   [count]
   (for [_ (range count)]
     (let [[x y] (geom/new-object-location :avoid globals/player)
-          dx (- 1 (rand 2))
-          dy (- 1 (rand 2))
           a (make-asteroid x y 1)]
       a)))
 
