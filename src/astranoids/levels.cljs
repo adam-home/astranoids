@@ -37,7 +37,9 @@
                           (= 0 (count (:saucers globals/scene)))))
     :update (fn []
               ;; Create a new saucer every so often, as long as the player is alive
+              ;; and there is at least one asteroid
               (when (and (> (:lives globals/player) 0)
+                         (> (count (:asteroids globals/scene)) 0)
                          (< (globals/count-objects :saucers) cfg/max-saucers)
                          (< 998 (rand 1000)))
                 (globals/add-object :saucers (saucer/make-saucers 1))))
@@ -69,6 +71,7 @@
     :update (fn []
               ;; Create a new saucer every so often, as long as the player is alive
               (when (and (> (:lives globals/player) 0)
+                         (> (count (:asteroids globals/scene)) 0)
                          (< (globals/count-objects :saucers) cfg/max-saucers)
                          (< 998 (rand 1000)))
                 (globals/add-object :saucers (saucer/make-saucers 1))))
@@ -87,6 +90,7 @@
     :update (fn []
               ;; Create a new saucer every so often, as long as the player is alive
               (when (and (> (:lives globals/player) 0)
+                         (> (count (:asteroids globals/scene)) 0)
                          (< (globals/count-objects :saucers) cfg/max-saucers)
                          (< 998 (rand 1000)))
                 (globals/add-object :saucers (saucer/make-saucers 1))))
